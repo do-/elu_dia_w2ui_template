@@ -34,7 +34,9 @@ define ([], function () {
 */
 
     var grid, s;
-    var loader = new Slick.Data.RemoteModel();
+    
+    var loader = new Slick.Data.RemoteModel ({type: 'users'})
+    
     var mpnFormatter = function (row, cell, value, columnDef, dataContext) {
         s ="<a href='" + dataContext.octopart_url + "' target=_blank>" + dataContext.mpn + "</a>";
         return s;
@@ -43,10 +45,14 @@ define ([], function () {
         return dataContext.brand.name;
     };
     var columns = [
-        {id: "mpn", name: "MPN", field: "mpn", formatter: mpnFormatter, width: 100, sortable: true },
-        {id: "brand", name: "Brand", field: "brand.name", formatter: brandFormatter, width: 100, sortable: true },
-        {id: "short_description", name: "Description", field: "short_description", width: 520 },
-    ];
+//        {id: "mpn", name: "MPN", field: "mpn", formatter: mpnFormatter, width: 100, sortable: true },
+//        {id: "brand", name: "Brand", field: "brand.name", formatter: brandFormatter, width: 100, sortable: true },
+        {id: "label", name: "ФИО", field: "label", width: 100},
+        {id: "login", name: "Login", field: "login", width: 50},
+        {id: "mail", name: "E-mail", field: "mail", width: 50},
+//                {field: 'id_role', caption: 'Роль',   size: 50,  render: function (i) {return data.roles [i.id_role]}},
+    ]
+    
     var options = {
         rowHeight: 21,
         editable: false,
@@ -59,7 +65,7 @@ define ([], function () {
     
     $(function () {
     
-        grid = new Slick.Grid("#myGrid", loader.data, columns, options);
+        grid = new Slick.Grid ("#myGrid", loader.data, columns, options);
         
         grid.onViewportChanged.subscribe(function (e, args) {
             var vp = grid.getViewport();
