@@ -13,3 +13,6 @@
 [submodule "front/root/_/libs/SlickGrid"]
 	path = front/root/_/libs/SlickGrid
 	url = https://github.com/6pac/SlickGrid.git
+[submodule "front/root/_/libs/elu_slick"]
+	path = front/root/_/libs/elu_slick
+	url = https://github.com/do-/elu_slick

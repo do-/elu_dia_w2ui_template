@@ -111,7 +111,8 @@ module.exports = function (grunt) {
                'root/_/libs/SlickGrid/lib/jquery.event.drag-2.3.0.js',
 //                'root/_/libs/SlickGrid/lib/jquery.jsonp-2.4.min.js',
                 'root/_/libs/SlickGrid/slick.core.js',
-                'root/_/libs/SlickGrid/slick.remotemodel.js',
+//                'root/_/libs/SlickGrid/slick.remotemodel.js',
+                'root/_/libs/elu_slick/elu_slick.js ',
                 'root/_/libs/SlickGrid/slick.grid.js',
                 'root/_/app/js/app.js'
             ],
