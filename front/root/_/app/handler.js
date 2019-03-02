@@ -177,7 +177,7 @@ function not_off (i) {return !i.off}
 
 function reload_page () { location.reload () }
 
-requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function (jq, elu, elu_w2ui) {
+requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function () {
 
     clearTimeout (window.alarm)
 

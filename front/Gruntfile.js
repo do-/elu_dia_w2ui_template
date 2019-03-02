@@ -85,7 +85,10 @@ module.exports = function (grunt) {
         options: {
             generateSourceMaps: false,
             baseUrl: 'root/_/libs',
-            paths: {app: '../app/js'},
+            paths: {
+                app: '../app/js',
+                'jquery-ui': 'SlickGrid/lib/jquery-ui-1.11.3.min.js',
+            },
 //            optimize: "none",
             out: "root/_/app/js/app.js",
             findNestedDependencies: true,
@@ -93,7 +96,7 @@ module.exports = function (grunt) {
         }
       }
     },
-    
+        
     concat: {
         options: {
             stripBanners: true,
@@ -101,8 +104,15 @@ module.exports = function (grunt) {
         js: {
             src: [
                 'root/_/libs/jquery/jquery-3.1.1.min.js', 
+//                'root/_/libs/SlickGrid/lib/jquery-1.11.2.min.js',
+//                'root/_/libs/SlickGrid/lib/jquery-ui-1.11.3.min.js',
                 'root/_/libs/requirejs/require.js',
                 'root/_/libs/w2ui/w2ui-1.5.rc1.min.js',
+               'root/_/libs/SlickGrid/lib/jquery.event.drag-2.3.0.js',
+//                'root/_/libs/SlickGrid/lib/jquery.jsonp-2.4.min.js',
+                'root/_/libs/SlickGrid/slick.core.js',
+                'root/_/libs/SlickGrid/slick.remotemodel.js',
+                'root/_/libs/SlickGrid/slick.grid.js',
                 'root/_/app/js/app.js'
             ],
             dest: 'root/_/app/js/_.js',
