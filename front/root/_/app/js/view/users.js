@@ -3,7 +3,7 @@ define ([], function () {
     return function (data, view) {
     
         $('title').text ('Пользователи системы')
-
+/*
         $('main').w2regrid ({ 
         
             name: 'usersGrid',             
@@ -28,7 +28,7 @@ define ([], function () {
         }).refresh ();
         
         $('#grid_usersGrid_search_all').focus ()
-
+*/
     }
 
 })
