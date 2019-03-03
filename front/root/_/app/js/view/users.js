@@ -59,6 +59,7 @@ define ([], function () {
         enableAddRow: false,
         enableCellNavigation: false,
         enableColumnReorder: false,
+        forceFitColumns: true,
     };
     
     var loadingIndicator = null;
@@ -77,6 +78,10 @@ define ([], function () {
             var vp = grid.getViewport();
             loader.ensureData(vp.top, vp.bottom);
         });
+        
+        grid.onDblClick.subscribe (function (e, a) {
+            openTab ('/users/' + a.grid.getDataItem (a.row).uuid)
+        })
         
         loader.onDataLoading.subscribe(function () {
             if (!loadingIndicator) {
