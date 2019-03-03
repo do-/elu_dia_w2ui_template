@@ -1,5 +1,11 @@
 define ([], function () {
 
+    $_DO.create_users = function (e) {
+        
+        use.block ('users_new')
+
+    }
+
     return function (done) {
     
         query ({type: 'roles'}, {}, function (data) {

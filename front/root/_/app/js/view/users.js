@@ -6,33 +6,6 @@ define ([], function () {
         
         fill (view, data, $('main'))        
 
-/*
-        $('main').w2regrid ({ 
-        
-            name: 'usersGrid',             
-            
-            show: {
-                toolbar: true,
-                footer: true,
-                toolbarAdd: true,
-            },            
-
-            columns: [                
-                {field: 'label',   caption: 'ФИО',    size: 100, sortable: true},
-                {field: 'login',   caption: 'Login',  size: 50,  sortable: true},
-                {field: 'id_role', caption: 'Роль',   size: 50,  render: function (i) {return data.roles [i.id_role]}},
-                {field: 'mail',    caption: 'E-mail', size: 50,  sortable: true},
-            ],
-                        
-            url: '_back/?type=users',
-
-            onAdd: function (e) {use.block ('users_new')},
-
-        }).refresh ();
-        
-        $('#grid_usersGrid_search_all').focus ()
-*/
-
     var grid, s;
     
     var loader = new Slick.Data.RemoteModel ({type: 'users'})
@@ -54,7 +27,8 @@ define ([], function () {
     ]
     
     var options = {
-        rowHeight: 21,
+        headerRowHeight: 30,    
+        rowHeight: 30,
         editable: false,
         enableAddRow: false,
         enableCellNavigation: false,
@@ -66,7 +40,7 @@ define ([], function () {
     
     $(function () {
     
-        grid = new Slick.Grid ("#myGrid", loader.data, columns, options);
+        grid = new Slick.Grid ("#grid_users", loader.data, columns, options);
         
         grid.onViewportChanged.subscribe(function (e, args) {
             var vp = grid.getViewport();
@@ -86,7 +60,7 @@ define ([], function () {
         loader.onDataLoading.subscribe(function () {
             if (!loadingIndicator) {
                 loadingIndicator = $("<span class='loading-indicator'><label>Buffering...</label></span>").appendTo(document.body);
-                var $g = $("#myGrid");
+                var $g = $("#grid_users");
                 loadingIndicator
                         .css("position", "absolute")
                         .css("top", $g.position().top + $g.height() / 2 - loadingIndicator.height() / 2)
@@ -104,7 +78,7 @@ define ([], function () {
             loadingIndicator.fadeOut();
         });
         
-        $("#txtSearch").keyup(function (e) {
+        $("#q").keyup(function (e) {
             if (e.which == 13) {
                 loader.setSearch($(this).val());
                 var vp = grid.getViewport();

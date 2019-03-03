@@ -16,3 +16,6 @@
 [submodule "front/root/_/libs/elu_slick"]
 	path = front/root/_/libs/elu_slick
 	url = https://github.com/do-/elu_slick
+[submodule "front/root/_/libs/BtrMilk"]
+	path = front/root/_/libs/BtrMilk
+	url = https://github.com/do-/BtrMilk.git
