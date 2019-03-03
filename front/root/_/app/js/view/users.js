@@ -47,9 +47,9 @@ define ([], function () {
     var columns = [
 //        {id: "mpn", name: "MPN", field: "mpn", formatter: mpnFormatter, width: 100, sortable: true },
 //        {id: "brand", name: "Brand", field: "brand.name", formatter: brandFormatter, width: 100, sortable: true },
-        {id: "label", name: "ФИО", field: "label", width: 100},
+        {id: "label", name: "ФИО", field: "label", width: 200},
         {id: "login", name: "Login", field: "login", width: 50},
-        {id: "mail", name: "E-mail", field: "mail", width: 50},
+        {id: "mail", name: "E-mail", field: "mail", width: 100},
 //                {field: 'id_role', caption: 'Роль',   size: 50,  render: function (i) {return data.roles [i.id_role]}},
     ]
     
