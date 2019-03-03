@@ -104,14 +104,10 @@ module.exports = function (grunt) {
         js: {
             src: [
                 'root/_/libs/jquery/jquery-3.1.1.min.js', 
-//                'root/_/libs/SlickGrid/lib/jquery-1.11.2.min.js',
-//                'root/_/libs/SlickGrid/lib/jquery-ui-1.11.3.min.js',
                 'root/_/libs/requirejs/require.js',
                 'root/_/libs/w2ui/w2ui-1.5.rc1.min.js',
-               'root/_/libs/SlickGrid/lib/jquery.event.drag-2.3.0.js',
-//                'root/_/libs/SlickGrid/lib/jquery.jsonp-2.4.min.js',
+                'root/_/libs/SlickGrid/lib/jquery.event.drag-2.3.0.js',
                 'root/_/libs/SlickGrid/slick.core.js',
-//                'root/_/libs/SlickGrid/slick.remotemodel.js',
                 'root/_/libs/elu_slick/elu_slick.js ',
                 'root/_/libs/SlickGrid/slick.grid.js',
                 'root/_/app/js/app.js'

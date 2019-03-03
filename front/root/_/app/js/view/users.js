@@ -5,7 +5,7 @@ define ([], function () {
         $('title').text ('Пользователи системы')
         
         fill (view, data, $('main'))        
-        
+
 /*
         $('main').w2regrid ({ 
         
@@ -111,7 +111,7 @@ define ([], function () {
         
         loader.setSort("score", -1);
         
-        grid.setSortColumn("score", false);
+//        grid.setSortColumn("score", false);
         
         // load the first page
         

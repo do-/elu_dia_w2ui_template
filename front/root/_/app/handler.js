@@ -177,7 +177,7 @@ function not_off (i) {return !i.off}
 
 function reload_page () { location.reload () }
 
-requirejs (['elu/elu', 'elu_w2ui/elu_w2ui', 'SlickGrid/lib/jquery.jsonp-2.4.min.js'], function () {
+requirejs (['elu/elu', 'elu_w2ui/elu_w2ui'], function () {
 
     clearTimeout (window.alarm)
 
