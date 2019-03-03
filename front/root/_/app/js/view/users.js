@@ -47,9 +47,9 @@ define ([], function () {
     var columns = [
 //        {id: "mpn", name: "MPN", field: "mpn", formatter: mpnFormatter, width: 100, sortable: true },
 //        {id: "brand", name: "Brand", field: "brand.name", formatter: brandFormatter, width: 100, sortable: true },
-        {id: "label", name: "ФИО", field: "label", width: 200},
-        {id: "login", name: "Login", field: "login", width: 50},
-        {id: "mail", name: "E-mail", field: "mail", width: 100},
+        {id: "label", name: "ФИО", field: "label", width: 200, sortable: true},
+        {id: "login", name: "Login", field: "login", width: 50, sortable: true},
+        {id: "mail", name: "E-mail", field: "mail", width: 100, sortable: true},
 //                {field: 'id_role', caption: 'Роль',   size: 50,  render: function (i) {return data.roles [i.id_role]}},
     ]
     
@@ -111,16 +111,16 @@ define ([], function () {
                 loader.ensureData(vp.top, vp.bottom);
             }
         });
-        
-        loader.setSearch($("#txtSearch").val());
-        
-        loader.setSort("score", -1);
-        
-//        grid.setSortColumn("score", false);
-        
+                
         // load the first page
         
-        grid.onViewportChanged.notify();
+        $(window).on ('resize', function (e) {
+        
+            grid.resizeCanvas ()
+                
+        })
+        
+        grid.onViewportChanged.notify ()
         
     })
 
