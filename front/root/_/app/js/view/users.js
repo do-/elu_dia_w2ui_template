@@ -8,44 +8,42 @@ define ([], function () {
 
         var loader = new Slick.Data.RemoteModel ({type: 'users'})
 
-        var columns = [
-            {id: "label", name: "ФИО", field: "label", width: 200, sortable: true},
-            {id: "login", name: "Login", field: "login", width: 50, sortable: true},
-            {id: "mail", name: "E-mail", field: "mail", width: 100, sortable: true},
-            {id: "id_role", name: "Роль", field: "id_role", width: 50, formatter: function (row, cell, value, columnDef, dataContext) {
-                return data.roles [value]
-            }},
-        ]
-
-        var options = {
-            headerRowHeight: 30,    
-            rowHeight: 30,
-            enableCellNavigation: true,
-            enableColumnReorder: false,
-            forceFitColumns: true,
-        };
-
         var loadingIndicator = null;
 
         $(function () {
+            
+            var grid = $("#grid_users").draw_table ({
 
-            var grid = new Slick.Grid ("#grid_users", loader.data, columns, options);
+                headerRowHeight: 30,    
+                rowHeight: 30,
+                enableCellNavigation: true,
+                enableColumnReorder: false,
+                forceFitColumns: true,                
+                data: loader.data,
+                columns: [
+                    {field: "label", name: "ФИО", width: 200, sortable: true},
+                    {field: "login", name: "Login", width: 50, sortable: true},
+                    {field: "mail", name: "E-mail", width: 100, sortable: true},
+                    {field: "id_role", name: "Роль", width: 50, voc: data.roles},
+                ]
 
-            grid.onViewportChanged.subscribe(function (e, args) {
-                var vp = grid.getViewport();
-                loader.ensureData(vp.top, vp.bottom);
-            });
+            })
 
-            grid.onSort.subscribe(function (e, args) {
-                loader.setSort(args.sortCol.field, args.sortAsc ? 1 : -1);
-                var vp = grid.getViewport();
-                loader.ensureData(vp.top, vp.bottom);
-            });
+            grid.onViewportChanged.subscribe (function (e, args) {
+                var vp = grid.getViewport ()
+                loader.ensureData (vp.top, vp.bottom)
+            })
+
+            grid.onSort.subscribe (function (e, args) {
+                loader.setSort (args.sortCol.field, args.sortAsc ? 1 : -1)
+                var vp = grid.getViewport ()
+                loader.ensureData (vp.top, vp.bottom)
+            })
 
             grid.onDblClick.subscribe (function (e, a) {
                 openTab ('/users/' + a.grid.getDataItem (a.row).uuid)
             })
-
+/*
             loader.onDataLoading.subscribe(function () {
                 if (!loadingIndicator) {
                     loadingIndicator = $("<span class='loading-indicator'><label>Buffering...</label></span>").appendTo(document.body);
@@ -57,21 +55,19 @@ define ([], function () {
                 }
                 loadingIndicator.show();
             });
-
-            loader.onDataLoaded.subscribe(function (e, args) {
-                for (var i = args.from; i <= args.to; i++) {
-                    grid.invalidateRow(i);
-                }
-                grid.updateRowCount();
-                grid.render();
-                loadingIndicator.fadeOut();
+*/
+            loader.onDataLoaded.subscribe (function (e, args) {
+                for (var i = args.from; i <= args.to; i ++) grid.invalidateRow (i)
+                grid.updateRowCount ()
+                grid.render ()
+//                loadingIndicator.fadeOut();
             });
 
             $("#q").keyup(function (e) {
                 if (e.which == 13) {
                     loader.setSearch($(this).val());
                     var vp = grid.getViewport();
-                    loader.ensureData(vp.top, vp.bottom);
+                    loader.ensureData (vp.top, vp.bottom);
                 }
             });
 
