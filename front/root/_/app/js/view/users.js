@@ -1,13 +1,11 @@
-define ([], function () {
-    
-    return function (data, view) {
+$_DRAW.users = async function (data) {
     
         $('title').text ('Пользователи системы')
-
-        fill (view, data, $('main'))        
+        
+        $('main').html (await use.html ('users'))
 
         var loader = new Slick.Data.RemoteModel ({type: 'users'})
-
+ 
         var loadingIndicator = null;
 
         $(function () {
@@ -41,7 +39,7 @@ define ([], function () {
             })
 
             grid.onDblClick.subscribe (function (e, a) {
-                openTab ('/users/' + a.grid.getDataItem (a.row).uuid)
+                openTab ('/user/' + a.grid.getDataItem (a.row).uuid)
             })
 /*
             loader.onDataLoading.subscribe(function () {
@@ -83,6 +81,4 @@ define ([], function () {
 
         })
 
-    }
-
-})
+}

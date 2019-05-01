@@ -51,7 +51,6 @@ module.exports = function (grunt) {
                 'root/_/libs/SlickGrid/slick.core.js',
                 'root/_/libs/elu_slick/elu_slick.js ',
                 'root/_/libs/SlickGrid/slick.grid.js',
-                'root/_/app/js/app.js'
                 'root/_/libs/elu/elu.js',
                 'root/_/libs/elu_w2ui/elu_w2ui.js',
                 'root/_/app/handler.js',
