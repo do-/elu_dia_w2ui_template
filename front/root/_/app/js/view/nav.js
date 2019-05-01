@@ -1,38 +1,29 @@
-define ([], function () {
+$_DRAW.nav = async function (data) {
     
-    return function (data, view) {
+    function svg (icon) {return staticURL (            
+        `libs/elu_dia_w2ui_template/svg/${icon}.svg`            
+    )}
 
-        var $nav = $('nav')
-           
-        if ($_USER) {
+    let $nav = $('<nav class=left-sidebar>')
+    
+    for (let name of ['header', 'footer']) {
+
+        let $result = $(`<${name}>`).appendTo ($nav)
+
+        for (let o of data [name]) {
         
-            fill (view, data, $nav.show ())
-            
-            $('body > nav header button').after ('<hr>')
-            $('body > nav footer button').before ('<hr>')
-            
-            $('body > nav header button').each (function () {
-            
-                var $this = $(this)
+            let $b = $('<button>')
+                .attr ({name: o.id, title: o.label})
+                .css  ({backgroundImage: `url(${svg (o.icon)})`})
+                .appendTo ($result)
+
+            if (o.id == 'open_' + $_REQUEST.type) $b.addClass ('active');
+                else clickOn ($b, $_DO [o.id + '_nav'])
                 
-                if (location.href.indexOf ($this.attr ('name').substr (5)) < 0) return
-                
-                $this.addClass ('active')
-                
-                return false
-            
-            })
-            
-/*            
-            var color = data.stand.color
-            
-            if (color) {            
-                $('nav').css ({background: color})
-                $('nav button').css ({'border-color': color})            
-            }
-*/        
         }
 
     }
 
-});
+    return $nav.insertBefore ($('main'))
+
+}

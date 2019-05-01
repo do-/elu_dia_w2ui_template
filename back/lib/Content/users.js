@@ -187,19 +187,10 @@ do_delete_users:
 
     async function () {
     
-        return Promise.all ([
-
-            this.db.update ('user_users', {
-                id_user_ref : this.rq.id,
-                is_on       : 0,
-            }, ['id_user_ref']),
-
-            this.db.update ('users', {
-                uuid        : this.rq.id, 
-                is_deleted  : 1, 
-            }),
-
-        ])
+        this.db.update ('users', {
+            uuid        : this.rq.id, 
+            is_deleted  : 1, 
+        })
 
     },
 
@@ -244,7 +235,7 @@ do_create_users:
 
         if (!/^[A-Za-z0-9_\.]+$/.test (data.login)) throw '#login#: Недопустимый login'
 
-        let d = {}
+        let d = {uuid: this.rq.id}
 
         for (let k of ['login', 'label', 'id_role']) d [k] = data [k]        
         
@@ -252,6 +243,7 @@ do_create_users:
             d.uuid = await this.db.insert ('users', d)
         }
         catch (x) {
+            if (this.db.is_pk_violation (e)) return d
             throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
         }
         
