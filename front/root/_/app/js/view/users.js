@@ -13,18 +13,16 @@ $_DRAW.users = async function (data) {
             {field: "id_role", name: "Роль", width: 50, voc: data.roles},
         ],
         
+        searchInputs: 
+            $(".toolbar :input").toArray ()
+        ,
+        
         url: {type: 'users'},
 
         onDblClick: (e, a) => open_tab ('/user/' + a.grid.getDataItem (a.row).uuid)
         
     })
 
-    $("#q").keyup ((e) => {
-        if (e.which == 13) grid.setFieldFilter (
-            {field: 'label', operator: 'begins', value: e.target.value}
-        )}
-    ).focus ()
-    
     return $result
 
 }
