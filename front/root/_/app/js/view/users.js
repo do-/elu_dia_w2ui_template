@@ -20,15 +20,11 @@ $_DRAW.users = async function (data) {
         url: {type: 'users'},
 
         onDblClick: (e, a) => open_tab ('/user/' + a.grid.getDataItem (a.row).uuid)
-        
+
     })
     
     $(".toolbar input:first").focus ()
-/*
-    $(".toolbar select").selectmenu ({
-        width: true,
-    })
-*/
+
     return $result
 
 }
