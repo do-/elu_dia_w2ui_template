@@ -20,10 +20,10 @@ $_DRAW.users = async function (data) {
     })
 
     $("#q").keyup ((e) => {
-        if (e.which != 13) return        
-        grid.loader.setSearch (e.target.value)
-        grid.onViewportChanged.notify ()
-    }).focus ()
+        if (e.which == 13) grid.setFieldFilter (
+            {field: 'label', operator: 'begins', value: e.target.value}
+        )}
+    ).focus ()
     
     return $result
 

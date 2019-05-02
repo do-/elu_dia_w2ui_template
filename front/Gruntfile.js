@@ -98,7 +98,10 @@ module.exports = function (grunt) {
       },
 
       styles: {
-        files: ['root/_/libs/elu_dia_w2ui_template/*.less'],
+        files: [
+            'root/_/libs/elu_dia_w2ui_template/*.less',
+            'root/_/libs/BtrMilk/*.less',
+        ],
         tasks: ['less'],
         options: {nospawn: true}
       },
