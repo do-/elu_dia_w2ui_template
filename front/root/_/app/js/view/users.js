@@ -22,6 +22,8 @@ $_DRAW.users = async function (data) {
         onDblClick: (e, a) => open_tab ('/user/' + a.grid.getDataItem (a.row).uuid)
         
     })
+    
+    $(".toolbar input:first").focus ()
 
     return $result
 
