@@ -24,7 +24,11 @@ $_DRAW.users = async function (data) {
     })
     
     $(".toolbar input:first").focus ()
-
+/*
+    $(".toolbar select").selectmenu ({
+        width: true,
+    })
+*/
     return $result
 
 }
