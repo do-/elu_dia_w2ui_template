@@ -1,56 +1,22 @@
 <main>
 
 	<style>
-
-		.login-outer {
-			height: 100%;
-			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			justify-content: center;
-			align-items: center;
-			align-content: stretch;
+		input {
+			margin: 5px 0 5px 0;
+			padding: 5px;
+			border-radius: 4px;
+			border: solid #005500 1px;
+			width: 300px;
 		}
-
-		.login-inner {
-			height: 175px;
-			width: 400px;
-		}
-
-		.input {
-			width: 140px;
-		}
-
 	</style>
 
-	<div class=login-outer>
+	<table width=100% height=100%><tr><td>
 
-		<div class="login-inner w2ui-reset w2ui-form">
+		<center><table>
+			<tr><td><input name=login placeholder="Login">
+			<tr><td><input name=password type=password placeholder="Пароль">
+		</table>
 
-				<div class="w2ui-form-box"><div class="w2ui-form-header"/></div>
-
-				<div class="w2ui-page page-0">
-
-					  <div class="w2ui-field">
-						 <label>Login</label>
-						 <div><input name=login class="w2ui-input" type=text></div>
-					  </div>
-
-					  <div class="w2ui-field">
-						 <label>Пароль</label>
-						 <div><input name=password class="w2ui-input" type=password></div>
-					  </div>
-
-				</div>
-
-				<div class="w2ui-buttons">
-					<button name="execute" class="w2ui-btn">Войти</button>
-				</div>
-
-			</div>
-
-		</div>
-
-	</div>
+	</table>
 
 </main>
