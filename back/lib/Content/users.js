@@ -231,13 +231,13 @@ do_create_users:
 
         let d = {uuid: this.rq.id}
 
-        for (let k of ['login', 'label', 'id_role']) d [k] = data [k]        
+        for (let k of ['uuid', 'login', 'label', 'id_role']) d [k] = data [k]        
         
         try {
-            d.uuid = await this.db.insert ('users', d)
+            await this.db.insert ('users', d)
         }
         catch (x) {
-            if (this.db.is_pk_violation (e)) return d
+            if (this.db.is_pk_violation (x)) return d
             throw x.constraint == 'ix_users_login' ? '#login#: Этот login уже занят' : x
         }
         
