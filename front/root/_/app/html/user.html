@@ -4,47 +4,35 @@
 		input[data-block-name=user] {width: 300px!important;}
 	</style>
 
-	<div>
+	<div class="drw form">
 
-        <div class="w2ui-page page-0">
+		<table>
+			<tr>
+				<td>
+				<td><span data-text="role.label" /> <span data-text="label" />
+			<tr>
+				<td>ФИО:
+				<td><input name=label />
+			<tr>
+				<td>login:
+				<td><input name=login />
+			<tr>
+				<td>E-mail:
+				<td><input name=mail />
+		</table>
 
-			<header>
-				<span data-text="role.label" /> <span data-text="label" />
-			</header>
+        <div class=toolbar>
 
-            <div class="w2ui-field">
-                <label>ФИО</label>
-                <div>
-                    <input name="label" />
-                </div>
-            </div>
+            <button name=edit>Редактировать</button>
 
-            <div class="w2ui-field">
-                <label>login</label>
-                <div>
-                    <input name="login" />
-                </div>
-            </div>
+            <button name=pass>Установить пароль</button>
+            <button name=delete>Удалить</button>
 
-            <div class="w2ui-field">
-                <label>E-mail</label>
-                <div>
-                    <input name="mail"  />
-                </div>
-            </div>
+            <button name=update>Сохранить</button>
+            <button name=cancel>Отменить</button>
 
-        </div>
-
-        <div class="w2ui-buttons">
-        	<span>
-                <button class=w2ui-btn name=edit   >Редактировать</button>
-                <button class=w2ui-btn name=pass   >Установить пароль</button>
-                <button class=w2ui-btn name=delete >Удалить</button>
-
-                <button class=w2ui-btn name=update data-edit>Сохранить</button>
-                <button class=w2ui-btn name=cancel data-edit>Отменить</button>
-            </span>
         </div>
 
 	</div>
+
 </span>

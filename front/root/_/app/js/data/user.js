@@ -25,12 +25,14 @@ $_DO.pass_user = function (e) {
 $_DO.update_user = async function (e) {
 
     if (!confirm ('Сохранить изменения?')) return
+    
+    let $form = $('.drw.form')
+    
+    let data = values ($form)
+    
+    $form.block ()    
 
-    let form = w2ui ['form']
-
-    form.lock ()
-
-    await response ({type: 'users', action: 'update'}, {data: form.values ()})
+    await response ({type: 'users', action: 'update'}, {data})
 
     location.reload ()
 
