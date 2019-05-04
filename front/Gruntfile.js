@@ -13,7 +13,7 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.css": "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.less"
+          "root/_/libs/elu_dia_w2ui_template/_.css": "root/_/libs/elu_dia_w2ui_template/elu_dia_w2ui_template.less"
         }
       }
     },
