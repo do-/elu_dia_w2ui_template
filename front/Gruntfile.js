@@ -13,7 +13,7 @@ module.exports = function (grunt) {
           optimization: 2
         },
         files: {
-          "root/_/libs/elu_dia_w2ui_template/_.css": "root/_/libs/elu_dia_w2ui_template/_.less"
+          "root/_/libs/_/_.css": "root/_/libs/_/_.less"
         }
       }
     },
@@ -65,7 +65,7 @@ module.exports = function (grunt) {
     },    
 /*    
     shell: {
-        reboot: {command: '/etc/init.d/elu_dia_w2ui_template restart'}
+        reboot: {command: '/etc/init.d/_ restart'}
     },
 */
     compress: {
