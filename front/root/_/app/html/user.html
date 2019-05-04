@@ -4,35 +4,40 @@
 		input[data-block-name=user] {width: 300px!important;}
 	</style>
 
-	<div class="drw form">
+	<table cellspacing=0 cellpadding=0 width=100% height=100%>
+		<tr><td height=1>
+			<div class="drw form">
 
-		<table>
-			<tr>
-				<td>
-				<td><span data-text="role.label" /> <span data-text="label" />
-			<tr>
-				<td>ФИО:
-				<td><input name=label />
-			<tr>
-				<td>login:
-				<td><input name=login />
-			<tr>
-				<td>E-mail:
-				<td><input name=mail />
-		</table>
+				<table>
+					<tr>
+						<td>
+						<td><span data-text="role.label" /> <span data-text="label" />
+					<tr>
+						<td>ФИО:
+						<td><input name=label />
+					<tr>
+						<td>login:
+						<td><input name=login />
+					<tr>
+						<td>E-mail:
+						<td><input name=mail />
+				</table>
 
-        <div class=toolbar>
+				<div class=toolbar>
 
-            <button name=edit>Редактировать</button>
+					<button name=edit>Редактировать</button>
 
-            <button name=pass>Установить пароль</button>
-            <button name=delete>Удалить</button>
+					<button name=pass>Установить пароль</button>
+					<button name=delete>Удалить</button>
 
-            <button name=update>Сохранить</button>
-            <button name=cancel>Отменить</button>
+					<button name=update>Сохранить</button>
+					<button name=cancel>Отменить</button>
 
-        </div>
+				</div>
 
-	</div>
+			</div>
+		<tr><td>
+			<div id=user_options style="width:100%;height:100%" class="drw table"/>
+	</table>
 
 </span>
