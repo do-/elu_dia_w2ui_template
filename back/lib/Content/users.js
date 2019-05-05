@@ -85,12 +85,12 @@ do_set_own_option_users:
 
     async function () {
 
-        let voc_user_option = this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
+        let voc_user_option = await this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
 
         if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
 
         let d = {
-            id_user: this.user.id
+            id_user: this.user.uuid
         }
 
         for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
