@@ -22,5 +22,7 @@ $_DRAW.users = async function (data) {
 	})   
 
 	grid.data.load (src)
-
+	
+	grid.events.on ("CellDblClick", r => open_tab (`/user/${r.uuid}`))
+	
 }
