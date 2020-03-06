@@ -3,11 +3,21 @@ const Session = require ('./HTTP/Session.js')
 const DiaW2uiFilter = require ('../../Ext/Dia/Content/Handler/HTTP/Ext/w2ui/Filter.js')
 
 module.exports = class extends Dia.HTTP.Handler {
-    
+
     check () {
+
         super.check ()
+
         let m = this.http.request.method
-        if (m != 'POST') throw '405 No ' + m + 's please'
+
+        switch (m) {
+        	case 'GET':
+        	case 'POST':
+        		break
+        	default:
+        		throw '405 No ' + m + 's please'
+        }
+
     }
 
     get_session () {
@@ -21,9 +31,21 @@ module.exports = class extends Dia.HTTP.Handler {
     	})
 
     }
+    
+    async read_params () {
+    
+    	this.http.request.url = this.http.request.url
+    		.replace (/\?/g, '&')
+    		.replace (/\/\&/g, '?')
+    		// DHX blindly appends '?': /_back/?type=users?from=0&limit=50&responseType=text
+        
+        return super.read_params ()
+
+    }    
 
     is_anonymous () {
-        return this.rq.type == 'sessions' && this.rq.action == 'create'
+    	return true // DHX sends no cookies
+//        return this.rq.type == 'sessions' && this.rq.action == 'create'
     }
 
     get_method_name () {
