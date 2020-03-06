@@ -19,28 +19,12 @@ get_vocs_of_users:
 select_users: 
     
     async function () {
-    
-    	this.rq.offset = this.rq.from
-   
-        this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]        
-        
-/*
-        if (this.rq.searchLogic == 'OR') {
 
-            let q = this.rq.search [0].value
-
-            this.rq.search = [
-                {field: 'label', operator: 'contains', value: q},
-                {field: 'login', operator: 'contains', value: q},
-                {field: 'mail',  operator: 'contains', value: q},
-            ]
-
-        }
-*/    
         let filter = this.w2ui_filter ()
         
         filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
         filter.is_deleted  = 0
+        filter.ORDER = 'label'
 
         return this.db.add_all_cnt ({}, [{users: filter}, 'roles AS role'])
 

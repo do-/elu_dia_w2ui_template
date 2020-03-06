@@ -1,6 +1,7 @@
 const Dia = require ('../../Ext/Dia/Dia.js')
 const Session = require ('./HTTP/Session.js')
 const DiaW2uiFilter = require ('../../Ext/Dia/Content/Handler/HTTP/Ext/w2ui/Filter.js')
+const DHX = require ('../../Ext/Dia/Content/Handler/HTTP/Ext/dhx/DHX.js')
 
 module.exports = class extends Dia.HTTP.Handler {
 
@@ -49,21 +50,11 @@ module.exports = class extends Dia.HTTP.Handler {
     }
     
     to_message (data) {
-    
-    	if (this.http.request.method == 'GET') { // DHX that is
 
-			let {from} = this.rq 
+    	if (this.http.request.method == 'GET') return DHX.to_grid_packet.call (this, data)
 
-			delete data.portion
-			
-			let total_count = parseInt (data.cnt); delete data.cnt
-
-    		for (let k in data) return {total_count, from, data: data [k]}
-
-    	}
-    
     	return super.to_message (data)
-    
+
     }    
 
     get_method_name () {
@@ -73,6 +64,12 @@ module.exports = class extends Dia.HTTP.Handler {
         return (rq.id ? 'get_item_of_' : 'select_') + rq.type
     }
     
-    w2ui_filter () {return new DiaW2uiFilter (this.rq)}
+    w2ui_filter () {
+    
+    	if (this.http.request.method == 'GET') return DHX.get_filter.call (this)
+    
+    	return new DiaW2uiFilter (this.rq)
+   	
+   	}
 
 }
