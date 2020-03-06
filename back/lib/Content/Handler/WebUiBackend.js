@@ -47,6 +47,24 @@ module.exports = class extends Dia.HTTP.Handler {
     	return true // DHX sends no cookies
 //        return this.rq.type == 'sessions' && this.rq.action == 'create'
     }
+    
+    to_message (data) {
+    
+    	if (this.http.request.method == 'GET') { // DHX that is
+
+			let {from} = this.rq 
+
+			delete data.portion
+			
+			let total_count = parseInt (data.cnt); delete data.cnt
+
+    		for (let k in data) return {total_count, from, data: data [k]}
+
+    	}
+    
+    	return super.to_message (data)
+    
+    }    
 
     get_method_name () {
         let rq = this.rq

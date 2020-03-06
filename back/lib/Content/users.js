@@ -18,10 +18,13 @@ get_vocs_of_users:
 
 select_users: 
     
-    function () {
+    async function () {
+    
+    	this.rq.offset = this.rq.from
    
-        this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]
-
+        this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]        
+        
+/*
         if (this.rq.searchLogic == 'OR') {
 
             let q = this.rq.search [0].value
@@ -33,7 +36,7 @@ select_users:
             ]
 
         }
-    
+*/    
         let filter = this.w2ui_filter ()
         
         filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
