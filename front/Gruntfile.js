@@ -49,6 +49,7 @@ module.exports = function (grunt) {
                 'root/_/libs/w2ui/w2ui-1.5.rc1.min.js',
                 'root/_/libs/elu/elu.js',
                 'root/_/libs/elu_w2ui/elu_w2ui.js',
+                'root/_/libs/elu_grid/elu_grid.js',
                 'root/_/app/handler.js',
                 'root/_/app/js/data/*.js',
                 'root/_/app/js/view/*.js',
@@ -99,7 +100,12 @@ module.exports = function (grunt) {
       },
 
       js: {
-        files: ['root/_/app/js/data/*.js', 'root/_/app/js/view/*.js', 'root/_/app/handler.js'],
+        files: [
+        	'root/_/libs/elu_grid/elu_grid.js', 
+        	'root/_/app/js/data/*.js', 
+        	'root/_/app/js/view/*.js', 
+        	'root/_/app/handler.js'
+        ],
         tasks: ['concat:js'],
         options: {nospawn: true}
       },
