@@ -3,6 +3,12 @@
 $_DO.open_users_nav = function () {
     open_tab ('/users')
 }
+
+////////////////////////////////////////////////////////////////////////////////
+
+$_DO.open_users__nav = function () {
+    open_tab ('/users_')
+}
     
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -53,6 +59,12 @@ $_GET.nav = async function (o) {
             {
                 id: "open_users",
                 label: "Пользователи",
+                icon: "users",
+                off: !is_admin
+            },
+            {
+                id: "open_users_",
+                label: "Пользователи (тест)",
                 icon: "users",
                 off: !is_admin
             },
