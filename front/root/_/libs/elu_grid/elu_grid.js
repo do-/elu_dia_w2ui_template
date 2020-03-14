@@ -1,5 +1,39 @@
 (($) => {
 
+var $the_col = null
+
+function resize_move (e) {
+
+	if (!$the_col) return
+		
+	let grid = $the_col.data ('grid'), {widths} = grid
+
+	widths [$the_col.prevAll ('.resize').length] += (e.pageX - $the_col.offset ().left)
+
+	grid.set_all_widths (widths)
+	
+}
+
+function resize_stop (e) {
+	
+	$the_col.closest ('.elu_grid')
+		.off ('mousemove', resize_move)
+		.off ('mouseup', resize_stop)
+
+	$the_col = null
+
+}
+
+function resize_start (e) {
+
+	$the_col = $(e.target)
+
+	$the_col.closest ('.elu_grid')
+		.on ('mousemove', resize_move)
+		.on ('mouseup',   resize_stop)
+
+}
+
 let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -50,6 +84,26 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
+	set_all_widths (w) {
+	
+		this.widths = w
+	
+		this.set_widths (this.$header_table, w)
+
+		this.set_widths (this.$table, w)
+		
+		let left = 0; for (let i = 0; i < this.resizers.length; i ++) {
+		
+			left += w [i]
+			
+			this.resizers [i].css ({left})
+			
+		}
+	
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+
 	set_widths ($table, a) {
 	
 		let i = 0
@@ -62,24 +116,54 @@ let Grid = class {
 	
 	}
 
-
 	///////////////////////////////////////////////////////////////////////////////
 
 	add_resizers () {
-	
-		let {$table} = this, $div = $table.closest ('.elu_grid'), left = 0
-		
+
+		let grid = this, {$table} = grid, $div = $table.closest ('.elu_grid'), left = 0
+
+		let $span = $('<span />').prependTo ($div)
+
 		$('col', $table).each (function () {
 		
 			let {width} = this.style; if (!width) return
 			
 			left += parseInt (width.replace ('px', ''))
 					
-			$('<div class=resize>').css ({left}).prependTo ($div)
+			grid.resizers.push ($('<div class=resize>')
+				.css ({left})
+				.data ('grid', grid)
+				.on ('mousedown', resize_start)
+				.appendTo ($span)
+			)
 			
 		})
+		
+		$('div', $span).unwrap ()
 	
 	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+	
+	copy_widths () {
+	
+		let {$table} = this, cnt = $('col', $table).length
+		
+		for (let $tr of $('tr', $table).toArray ()) {
+		
+			let w = this.get_widths ($tr)
+			
+			if (w.length != cnt || !w [0]) continue
+			
+			w.pop ()
+			
+			this.set_all_widths (w)
+			
+			break
+
+		}
+		
+	}	
 
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -88,6 +172,9 @@ let Grid = class {
 		if ($table.length != 1) throw new Error (`The length must be 1 (actually ${$table.length})`)
 
 		let {tagName} = $table.get (0); if (tagName != 'TABLE') throw new Error (`Root element must be a TABLE (actually ${tagName})`)
+		
+		this.widths = []
+		this.resizers = []
 		
 		this.$table = $table
 
@@ -98,22 +185,24 @@ let Grid = class {
 
 		let $tr = $('tr:first', $table); if ($tr.length) $(this.create_colgroup ($tr)).prependTo ($table)
 
-		let $thead = $('thead', $table); if ($thead.length) this.create_header_table ($thead)
-		
-		let w = this.get_widths ($('tr:first', $table)); w.pop ()
-		
-		this.set_widths (this.$header_table, w)
-		this.set_widths (this.$table, w)
-		
-		this.add_resizers ()
-			
+		let $thead = $('thead', $table); if ($thead.length) this.create_header_table ($thead)		
+					
 	}
 
 }
 
-$.fn.draw_table = function (o) {
+$.fn.draw_table = async function (o) {
 
-	this.data ('grid', new Grid (this, o))
+	let grid = new Grid (this, o)
+		
+//	setTimeout (() => grid.copy_widths (), 1000)
+	
+	grid.copy_widths ()
+	grid.add_resizers ()
+
+	this.data ('grid', grid)
+	
+	return this
 
 }
 

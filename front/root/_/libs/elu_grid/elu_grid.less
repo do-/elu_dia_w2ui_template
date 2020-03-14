@@ -1,0 +1,38 @@
+div.elu_grid {
+
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	
+	& > header {
+		padding-right: 17px;
+	}
+
+	& > main {
+		overflow-y: scroll;
+	}
+
+	table {
+		width: 100%;
+		
+		tr {
+			height: 26px;
+		}
+		
+	}
+
+	div.resize {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 3px;
+		height: 100%;
+		cursor: col-resize;
+		bbbackground: red;
+		user-select: none;
+		z-index: 1;
+	}
+	
+}

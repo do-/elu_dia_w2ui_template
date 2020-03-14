@@ -1,7 +1,14 @@
 $_DRAW.users_ = async function (data) {
 
-    $('title').text ('TEST')
+darn (data)
 
+    $('title').text ('TEST')
+    
+    let $view = await to_fill ('users_', data, $('main'))
+    
+    return await $view.draw_table ({})
+    
+/*
     $('main').w2regrid ({ 
     
         name: 'usersGrid',             
@@ -27,5 +34,5 @@ $_DRAW.users_ = async function (data) {
     }).refresh ();
     
     $('#grid_usersGrid_search_all').focus ()
-
+*/
 }
