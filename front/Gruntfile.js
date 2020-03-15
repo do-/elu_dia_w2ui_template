@@ -105,6 +105,7 @@ module.exports = function (grunt) {
 
       js: {
         files: [
+        	'root/_/libs/elu/elu.js', 
         	'root/_/libs/elu_grid/elu_grid.js', 
         	'root/_/app/js/data/*.js', 
         	'root/_/app/js/view/*.js', 

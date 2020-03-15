@@ -1,4 +1,7 @@
-<table>
+<!--
+<template>
+-->
+<table id=users_grid>
 
 	<thead>
 		<tr>
@@ -16,12 +19,31 @@
 	</thead>
 
 	<tbody>
-		<tr data-list=users>
-			<td data-text=label>
-			<td data-text=login>
-			<td data-text=id_role width=1%>
-			<td data-text=mail>
-		</tr>
+
+<!--
+			<tr data-list=users>
+				<td data-text=label>
+				<td data-text=login>
+				<td data-text=id_role width=1%>
+				<td data-text=mail>
+			</tr>
+
+-->
+		<template data-list=users>
+			<tr>
+				<td data-text=label>
+				<td data-text=login>
+				<td data-text=id_role width=1%>
+				<td data-text=mail>
+			</tr>
+			<tr>
+				<td colspan=4>....
+			</tr>
+		</template>
+
 	</tbody>
 
 </table>
+<!--
+</template>
+-->

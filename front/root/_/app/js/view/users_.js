@@ -4,7 +4,7 @@ $_DRAW.users_ = async function (data) {
     
     let $view = await to_fill ('users_', data, $('main'))
     
-    $view = await $view.draw_table ({
+    $view = await $('#users_grid').draw_table ({
     
     	on: {    	
     		cell: {    		
@@ -13,6 +13,8 @@ $_DRAW.users_ = async function (data) {
     	}
     
     })
+    
+//    refill (data, $view)
     
     return $view
     
