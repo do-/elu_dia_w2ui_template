@@ -169,12 +169,45 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
-	constructor ($table, o) {
+	setup_cell_event_handlers (cell) {
+	
+		if (!cell) return
+		
+		for (let k of ['click', 'dblclick']) {
+		
+			let h = cell [k]; if (!h) continue
+
+			this.$table.on (k, e => {
+
+				let {target} = e; if (target.tagName != 'TD') return
+
+				let $t = $(target); h ($t.parent ().data ().data, $t.attr ('data-text'), e)
+
+			})
+
+		}		
+	
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+
+	setup_event_handlers () {
+	
+		let {on} = this.o; if (!on) return
+		
+		this.setup_cell_event_handlers (on.cell)
+	
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+
+	constructor ($table, o = {}) {
 	
 		if ($table.length != 1) throw new Error (`The length must be 1 (actually ${$table.length})`)
 
 		let {tagName} = $table.get (0); if (tagName != 'TABLE') throw new Error (`Root element must be a TABLE (actually ${tagName})`)
 		
+		this.o = o
 		this.widths = []
 		this.resizers = []
 		
@@ -198,6 +231,7 @@ $.fn.draw_table = async function (o) {
 	grid.copy_widths ()
 	grid.add_resizers ()
 	grid.create_header_table ()
+	grid.setup_event_handlers ()
 
 	this.data ('grid', grid)
 	
