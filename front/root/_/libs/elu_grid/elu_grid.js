@@ -10,7 +10,7 @@ function resize_move (e) {
 
 	widths [$the_col.prevAll ('.resize').length] += (e.pageX - $the_col.offset ().left)
 
-	grid.set_all_widths (widths)
+	grid.set_widths (widths)
 	
 }
 
@@ -53,9 +53,11 @@ let Grid = class {
 	
 	///////////////////////////////////////////////////////////////////////////////
 
-	create_header_table ($thead) {
+	create_header_table () {
 	
 		let {$table} = this
+		
+		let $thead = $('thead', $table); if (!$thead.length) return		
 	
 		let height = $thead.height ()
 
@@ -84,13 +86,11 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
-	set_all_widths (w) {
+	set_widths (w) {
 	
 		this.widths = w
-	
-		this.set_widths (this.$header_table, w)
-
-		this.set_widths (this.$table, w)
+			
+		for (let k of ['$header_table', '$table']) this.set_table_col_widths (this [k], w)
 		
 		let left = 0; for (let i = 0; i < this.resizers.length; i ++) {
 		
@@ -104,7 +104,9 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
-	set_widths ($table, a) {
+	set_table_col_widths ($table, a) {
+	
+		if (!$table) return
 	
 		let i = 0
 
@@ -157,7 +159,7 @@ let Grid = class {
 			
 			w.pop ()
 			
-			this.set_all_widths (w)
+			this.set_widths (w)
 			
 			break
 
@@ -184,8 +186,6 @@ let Grid = class {
 		$table.wrap ('<div class=elu_grid>')
 
 		let $tr = $('tr:first', $table); if ($tr.length) $(this.create_colgroup ($tr)).prependTo ($table)
-
-		let $thead = $('thead', $table); if ($thead.length) this.create_header_table ($thead)		
 					
 	}
 
@@ -194,11 +194,10 @@ let Grid = class {
 $.fn.draw_table = async function (o) {
 
 	let grid = new Grid (this, o)
-		
-//	setTimeout (() => grid.copy_widths (), 1000)
-	
+			
 	grid.copy_widths ()
 	grid.add_resizers ()
+	grid.create_header_table ()
 
 	this.data ('grid', grid)
 	
