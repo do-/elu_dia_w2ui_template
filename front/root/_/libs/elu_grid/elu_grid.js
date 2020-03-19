@@ -194,13 +194,52 @@ let Grid = class {
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////
+	
+	async load () {
+	
+		let cnt_all = await response (this.tia, this.data)
+		
+		this.cnt = parseInt (cnt_all.cnt)
+		
+		let [list] = Object.values (cnt_all).filter (Array.isArray)
+		
+		let $template = $('tbody>template', this.$table)
+		
+		let data = clone (this.$table.data ('data'))
+		
+		let key = $template.attr ('data-list')
+		
+		data [key] = list
+		
+		let $tbody = $('tbody', this.$table)
+		
+		let $t = $('<tbody>').append ($template.clone ())
+				
+		let $trs = fill ($t, data).children ('tr').appendTo ($tbody)
+	
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
 
 	constructor ($table, o = {}) {
 	
 		if ($table.length != 1) throw new Error (`The length must be 1 (actually ${$table.length})`)
 
 		let {tagName} = $table.get (0); if (tagName != 'TABLE') throw new Error (`Root element must be a TABLE (actually ${tagName})`)
+
+		let {src} = o; if (src) {
 		
+			if (!Array.isArray (src)) src = [src]
+
+			let [tp, body] = src
+		
+			let [type, part] = tp.split ('.')
+						
+			this.tia  = {type, part, id: null}
+			this.data = {...{search: [], offset: 0, limit: 50}, ...(body || {})}
+
+		}
+
 		this.o = o
 		this.widths = []
 		this.resizers = []
@@ -221,6 +260,8 @@ let Grid = class {
 $.fn.draw_table = async function (o) {
 
 	let grid = new Grid (this, o)
+	
+	if (o.src) await grid.load ()
 			
 	grid.copy_widths ()
 	grid.add_resizers ()

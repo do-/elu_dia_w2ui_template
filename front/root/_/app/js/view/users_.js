@@ -6,16 +6,16 @@ $_DRAW.users_ = async function (data) {
     
     $view = await $('#users_grid').draw_table ({
     
+        src: 'users',
+
     	on: {    	
     		cell: {    		
     			dblclick: (r) => open_tab (`/user/${r.uuid}`)    		
-    		}    	
+    		}
     	}
     
     })
-    
-//    refill (data, $view)
-    
+
     return $view
     
 /*
