@@ -73,14 +73,8 @@ let Grid = class {
 	///////////////////////////////////////////////////////////////////////////////
 
 	get_widths ($tr) {
-	
-		let a = []
-	
-		$('th, td', $tr).each (function () {
-			a.push ($(this).width ())
-		})	
 		
-		return a
+		return $('th, td', $tr).map ((i, e) => e.offsetWidth).toArray ()
 	
 	}
 
@@ -154,9 +148,9 @@ let Grid = class {
 		for (let $tr of $('tr', $table).toArray ()) {
 		
 			let w = this.get_widths ($tr)
-			
+
 			if (w.length != cnt || !w [0]) continue
-			
+
 			w.pop ()
 			
 			this.set_widths (w)
