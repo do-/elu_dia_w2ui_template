@@ -34,6 +34,18 @@ function resize_start (e) {
 
 }
 
+function scroll (e) {
+
+darn (this)
+
+	let $main = $(this), $table = $('table', $main), grid = $table.data ('grid')
+	
+	let $td = $('td[data-more]', $table); if (!$td.length) return
+
+darn ($td)	
+
+}
+
 let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -73,7 +85,9 @@ let Grid = class {
 		$header_table.prependTo ($table.parent ()).wrap ('<header />').parent ().css ({height})
 
 		$thead.remove ()
-		$table.wrap ('<main />')		
+		$table.wrap ('<main />')
+		
+		if (this.tia) $table.parent ().scroll (scroll)
 	
 	}
 
@@ -182,7 +196,9 @@ let Grid = class {
 
 				let {target} = e; if (target.tagName != 'TD') return
 
-				let $t = $(target); h ($t.parent ().data ().data, $t.attr ('data-text'), e)
+				let $t = $(target); if ($t.is ('[data-more]')) return
+				
+				h ($t.parent ().data ().data, $t.attr ('data-text'), e)
 
 			})
 
@@ -212,7 +228,17 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
-	lock () {
+	async lock () {
+	
+		await new Promise (ok => {
+		
+			if (!this.is_locked) return ok ()
+
+			let t = setInterval (() => this.is_locked ? 0 : ok (clearInterval (t)), 10)
+
+		})
+		
+		this.is_locked = true
 	
 		let {$table} = this
 		
@@ -241,6 +267,8 @@ let Grid = class {
 		
 		.remove ()
 		
+		delete this.is_locked
+		
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////
@@ -249,7 +277,9 @@ let Grid = class {
 
 		let {offset, limit} = this
 		
-		this.lock ()
+		await this.lock ()
+		
+		if (this.cnt == this.total) return
 
 		let cnt_all = await response (this.tia, {offset, limit, ...this.data})
 
@@ -341,7 +371,7 @@ let Grid = class {
 		$table.wrap ('<div class=elu_grid>')
 
 		let $tr = $('tr:first', $table); if ($tr.length) $(this.create_colgroup ($tr)).prependTo ($table)
-					
+
 	}
 
 }
@@ -358,6 +388,8 @@ $.fn.draw_table = async function (o) {
 	grid.setup_event_handlers ()
 
 	this.data ('grid', grid)
+	
+	if (o.src) ('main', this).scroll ()
 	
 	return this
 
