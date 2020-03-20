@@ -40,11 +40,18 @@ let Grid = class {
 
 	create_colgroup ($tr) {
 
-		let cols = '<colgroup>'
+		let cols = '<colgroup>', grid = this
+		
+		grid.colspan = 0
 
 		$('th, td', $tr).each (function () {
+
 			let colspan = parseInt ($(this).attr ('colspan')) || 1
+
+			grid.colspan += colspan
+
 			for (let i = 0; i < colspan; i ++) cols += '<col />'
+
 		})
 
 		return cols += '</colgroup>'
@@ -192,15 +199,40 @@ let Grid = class {
 		this.setup_cell_event_handlers (on.cell)
 	
 	}
-	
+
 	///////////////////////////////////////////////////////////////////////////////
+
+	async reload () {
 	
+		this.clear ()
+		
+		return this.load ()
+	
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+
 	async load () {
-	
-		let cnt_all = await response (this.tia, this.data)
+
+		let {offset, limit} = this
+
+		let cnt_all = await response (this.tia, {offset, limit, ...this.data})
+
+		let cnt = parseInt (cnt_all.cnt)
 		
-		this.cnt = parseInt (cnt_all.cnt)
-		
+		if (!('total' in this)) {
+
+			this.total = cnt
+
+		}
+		else if (this.total != cnt) {
+
+			alert ('Данные на сервере изменились')
+
+			return await this.reload ()
+			
+		}
+
 		let [list] = Object.values (cnt_all).filter (Array.isArray)
 		
 		let $template = $('tbody>template', this.$table)
@@ -211,11 +243,28 @@ let Grid = class {
 		
 		data [key] = list
 		
+		this.cnt += list.length
+		
 		let $tbody = $('tbody', this.$table)
 		
 		let $t = $('<tbody>').append ($template.clone ())
 				
-		let $trs = fill ($t, data).children ('tr').appendTo ($tbody)
+		fill ($t, data).children ('tr').appendTo ($tbody)
+		
+		if (this.cnt < this.total) $(`<tr><td colspan=${this.colspan} data-more>...</td><tr>`).appendTo ($tbody)
+
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+	
+	clear () {
+	
+		delete this.total
+		delete this.cnt
+		
+		this.offset = 0
+		
+		$('tbody>tr', this.$table).remove ()
 	
 	}
 	
@@ -236,13 +285,16 @@ let Grid = class {
 			let [type, part] = tp.split ('.')
 						
 			this.tia  = {type, part, id: null}
-			this.data = {...{search: [], offset: 0, limit: 50}, ...(body || {})}
+			this.data = {...{search: []}, ...(body || {})}
 
 		}
 
 		this.o = o
 		this.widths = []
 		this.resizers = []
+		this.offset = 0
+		this.cnt = 0
+		this.limit = o.limit || 50
 		
 		this.$table = $table
 

@@ -7,6 +7,8 @@ $_DRAW.users_ = async function (data) {
     $view = await $('#users_grid').draw_table ({
     
         src: 'users',
+        
+        limit: 2,
 
     	on: {    	
     		cell: {    		
