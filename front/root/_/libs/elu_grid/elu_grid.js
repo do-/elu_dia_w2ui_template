@@ -68,7 +68,7 @@ let Grid = class {
 	
 		let height = $thead.height ()
 
-		let $header_table = this.$header_table = $table.clone ()
+		let $header_table = this.$header_table = $table.clone ().removeAttr ('id')
 		$('tbody', $header_table).remove ()
 		$header_table.prependTo ($table.parent ()).wrap ('<header />').parent ().css ({height})
 
@@ -212,9 +212,44 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
+	lock () {
+	
+		let {$table} = this
+		
+		let {tHead} = $table [0], {offsetHeight} = tHead || {offsetHeight: 0}
+
+		$('<div class=progress>').css ({
+			top: offsetHeight, 
+			height: 'calc(100% - ' + offsetHeight + 'px)'}
+		)
+		
+		.appendTo ($table.parent ())
+		
+		.show ()
+		
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+
+	unlock () {
+	
+		let {$table} = this
+		
+		$('.progress', $table.parent ())
+		
+		.hide ()
+		
+		.remove ()
+		
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+
 	async load () {
 
 		let {offset, limit} = this
+		
+		this.lock ()
 
 		let cnt_all = await response (this.tia, {offset, limit, ...this.data})
 
@@ -252,6 +287,8 @@ let Grid = class {
 		fill ($t, data).children ('tr').appendTo ($tbody)
 		
 		if (this.cnt < this.total) $(`<tr><td colspan=${this.colspan} data-more>...</td><tr>`).appendTo ($tbody)
+
+		this.unlock ()
 
 	}
 	
