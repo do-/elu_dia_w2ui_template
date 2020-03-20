@@ -34,15 +34,17 @@ function resize_start (e) {
 
 }
 
-function scroll (e) {
+function more (l) {
 
-darn (this)
+	let e = l [0]; if (!e.isIntersecting) return 
 
-	let $main = $(this), $table = $('table', $main), grid = $table.data ('grid')
+	let grid = $(e.target.parentElement.parentElement.parentElement).data ('grid')
 	
-	let $td = $('td[data-more]', $table); if (!$td.length) return
-
-darn ($td)	
+	$(e.target).parent ().remove ()
+	
+	grid.offset += grid.limit
+	
+	grid.load ()
 
 }
 
@@ -87,8 +89,12 @@ let Grid = class {
 		$thead.remove ()
 		$table.wrap ('<main />')
 		
-		if (this.tia) $table.parent ().scroll (scroll)
-	
+		if (this.tia) this.observer = new IntersectionObserver (more, {
+			root: $table.parent [0],
+			rootMargin: '0px',
+			threshold: 0,
+		})
+
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -314,12 +320,32 @@ let Grid = class {
 		
 		let $t = $('<tbody>').append ($template.clone ())
 				
-		fill ($t, data).children ('tr').appendTo ($tbody)
+		let $trs = fill ($t, data).children ('tr')
+
+		$trs.appendTo ($tbody)
 		
-		if (this.cnt < this.total) $(`<tr><td colspan=${this.colspan} data-more>...</td><tr>`).appendTo ($tbody)
+		if (this.cnt < this.total) {
+		
+			let $tr = $(`<tr><td colspan=${this.colspan} data-more>...</td><tr>`).appendTo ($tbody)
+			
+			this.observe ()
+
+		}
 
 		this.unlock ()
 
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+	
+	observe () {
+	
+		let {observer, $table} = this; if (!observer) return
+		
+		let td = $('td[data-more]', $table) [0]; if (!td) return
+		
+		observer.observe (td)
+	
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////
@@ -389,7 +415,7 @@ $.fn.draw_table = async function (o) {
 
 	this.data ('grid', grid)
 	
-	if (o.src) ('main', this).scroll ()
+	grid.observe ()
 	
 	return this
 
