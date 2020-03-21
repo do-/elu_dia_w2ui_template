@@ -44,13 +44,39 @@ function more (l) {
 
 function sort (e) {
 
-	let $th = $(e.target)
+	let {ctrlKey, target} = e
+
+	let $th = $(target), field = $th.attr ('data-sort')		
 	
-	$th.attr ('data-order', $th.attr ('data-order') == 'ASC' ? 'DESC' : 'ASC')
+	let grid = $th.closest ('header').nextAll ('main').children ().data ('grid')
+	
+	let sort = ctrlKey ? (grid.data.sort || []).filter (i => i.field != field) : []
+		
+	sort.push ({field, direction: !ctrlKey && $th.attr ('data-order') == 'asc' ? 'desc' : 'asc'})
+
+	grid.sort (sort)
 
 }
 
 let Grid = class {
+
+	///////////////////////////////////////////////////////////////////////////////
+
+	async sort (sort) {
+
+		this.data.sort = sort
+		
+		let {$header_table} = this; if ($header_table) {
+		
+			$('th', $header_table).removeAttr ('data-order')
+			
+			for (let {field, direction} of sort) $(`th[data-sort=${field}]`, $header_table).attr ('data-order', direction)
+		
+		}
+		
+		return this.reload ()
+	
+	}
 
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -249,9 +275,9 @@ let Grid = class {
 	///////////////////////////////////////////////////////////////////////////////
 
 	async reload () {
-	
+
 		this.clear ()
-		
+
 		return this.load ()
 	
 	}
@@ -305,12 +331,12 @@ let Grid = class {
 
 	async load () {
 
-		let {offset, limit} = this
-		
-		await this.lock ()
-		
-		if (this.cnt == this.total) return
+		if ('total' in this && this.total == this.cnt) return
 
+		let {offset, limit} = this
+
+		await this.lock ()
+				
 		let cnt_all = await response (this.tia, {offset, limit, ...this.data})
 
 		let cnt = parseInt (cnt_all.cnt)
@@ -347,7 +373,7 @@ let Grid = class {
 		let $trs = fill ($t, data).children ('tr')
 
 		$trs.appendTo ($tbody)
-		
+
 		if (this.cnt < this.total) {
 
 			this.check_colspan ()
@@ -379,7 +405,7 @@ let Grid = class {
 	clear () {
 	
 		delete this.total
-		delete this.cnt
+		this.cnt = 0
 		
 		this.offset = 0
 		
