@@ -42,6 +42,14 @@ function more (l) {
 	
 }
 
+function sort (e) {
+
+	let $th = $(e.target)
+	
+	$th.attr ('data-order', $th.attr ('data-order') == 'ASC' ? 'DESC' : 'ASC')
+
+}
+
 let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -195,6 +203,16 @@ let Grid = class {
 
 	///////////////////////////////////////////////////////////////////////////////
 
+	setup_head_event_handlers () {
+	
+		let {$header_table} = this; if (!$header_table) return
+
+		$('th[data-sort]', $header_table).click (sort)
+	
+	}
+
+	///////////////////////////////////////////////////////////////////////////////
+
 	setup_cell_event_handlers (cell) {
 	
 		if (!cell) return
@@ -223,6 +241,7 @@ let Grid = class {
 	
 		let {on} = this.o; if (!on) return
 		
+		this.setup_head_event_handlers ()
 		this.setup_cell_event_handlers (on.cell)
 	
 	}
@@ -330,12 +349,11 @@ let Grid = class {
 		$trs.appendTo ($tbody)
 		
 		if (this.cnt < this.total) {
-		
+
 			this.check_colspan ()
-darn (this)		
-darn (this.colspan)		
+
 			let $tr = $(`<tr><td colspan=${this.colspan} data-more>...</td></tr>`).appendTo ($tbody)
-			
+
 			this.observe ()
 
 		}

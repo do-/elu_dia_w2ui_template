@@ -29,11 +29,31 @@ div.elu_grid {
 				height: 26px;
 				
 				th {
+					line-height: 17px;
 					height: 25px;
 					background-image: linear-gradient(#f9f9f9,#e4e4e4);
 					font-weight: normal;
 					text-align: start;
+					
+					.order () {
+						text-align: right;
+						float:right;
+						color: #8D99A7;
+						font-size: 17px;
+					}
+
+					&[data-order=ASC]:after {
+						content: "\25B4";
+						.order ();
+    					}
+
+					&[data-order=DESC]:after {
+						content: "\25BE";
+						.order ();
+					}
+
 				}
+				
 			
 			}
 
