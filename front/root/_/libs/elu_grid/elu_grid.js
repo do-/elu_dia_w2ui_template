@@ -57,27 +57,17 @@ let Grid = class {
 	}	
 	
 	///////////////////////////////////////////////////////////////////////////////
-
-	create_colgroup ($tr) {
-
-		let cols = '<colgroup>', grid = this
-		
-		grid.colspan = 0
-
-		$('th, td', $tr).each (function () {
-
-			let colspan = parseInt ($(this).attr ('colspan')) || 1
-
-			grid.colspan += colspan
-
-			for (let i = 0; i < colspan; i ++) cols += '<col />'
-
-		})
-
-		return cols += '</colgroup>'
-
-	}
 	
+	check_colspan () {
+	
+		if (this.colspan) return
+		
+		let $tr = $('tr:first', this.$table); if (!$tr.length) return
+		
+		this.colspan = $('th, td', $tr).toArray ().reduce ((a, t) => a += parseInt ($(t).attr ('colspan')) || 1, 0)
+	
+	}
+		
 	///////////////////////////////////////////////////////////////////////////////
 
 	create_header_table () {
@@ -93,6 +83,15 @@ let Grid = class {
 		$header_table.prependTo ($table.parent ()).wrap ('<header />').parent ().css ({height})
 
 		$thead.remove ()
+
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+
+	wrap_body_table () {
+	
+		let {$table} = this
+		
 		$table.wrap ('<main />')
 		
 		if (this.tia) this.observer = new IntersectionObserver (more, {
@@ -101,7 +100,7 @@ let Grid = class {
 			threshold: 0,
 		})
 
-	}
+	}	
 
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -332,6 +331,9 @@ let Grid = class {
 		
 		if (this.cnt < this.total) {
 		
+			this.check_colspan ()
+darn (this)		
+darn (this.colspan)		
 			let $tr = $(`<tr><td colspan=${this.colspan} data-more>...</td></tr>`).appendTo ($tbody)
 			
 			this.observe ()
@@ -396,13 +398,23 @@ let Grid = class {
 		this.limit = o.limit || 50
 		
 		this.$table = $table
+		$table.wrap ('<div class=elu_grid>')
 
+
+	}
+	
+	init_cols () {
+	
+		let {$table} = this
+	
 		$('colgroup', $table).remove ()
 		$('col', $table).remove ()
 
-		$table.wrap ('<div class=elu_grid>')
-
-		let $tr = $('tr:first', $table); if ($tr.length) $(this.create_colgroup ($tr)).prependTo ($table)
+		let $tr = $('tr:first', $table); if (!$tr.length) return
+		
+		this.check_colspan ()
+		
+		$('<col>'.repeat (this.colspan)).prependTo ($table).wrap ('<colgroup>')
 
 	}
 
@@ -413,10 +425,12 @@ $.fn.draw_table = async function (o) {
 	let grid = new Grid (this, o)
 	
 	if (o.src) await grid.load ()
-			
+
+	grid.init_cols ()			
 	grid.copy_widths ()
 	grid.add_resizers ()
 	grid.create_header_table ()
+	grid.wrap_body_table ()
 	grid.setup_event_handlers ()
 
 	this.data ('grid', grid)

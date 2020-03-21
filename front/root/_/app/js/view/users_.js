@@ -8,7 +8,7 @@ $_DRAW.users_ = async function (data) {
     
         src: 'users',
         
-//        limit: 2,
+        limit: 2,
 
     	on: {    	
     		cell: {    		
