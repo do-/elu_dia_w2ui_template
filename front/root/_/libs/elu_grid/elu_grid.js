@@ -38,18 +38,24 @@ function more (l) {
 
 	let e = l [0]; if (!e.isIntersecting) return 
 
-	let grid = $(e.target.parentElement.parentElement.parentElement).data ('grid')
+	$(e.target.parentElement.parentElement.parentElement).data ('grid').more ()
 	
-	$(e.target).parent ().remove ()
-	
-	grid.offset += grid.limit
-	
-	grid.load ()
-
 }
 
 let Grid = class {
 
+	///////////////////////////////////////////////////////////////////////////////
+
+	async more () {
+	
+		$('td[data-more]', this.$table).parent ().remove ()
+	
+		this.offset += this.limit
+
+		return this.load ()
+
+	}	
+	
 	///////////////////////////////////////////////////////////////////////////////
 
 	create_colgroup ($tr) {
@@ -326,7 +332,7 @@ let Grid = class {
 		
 		if (this.cnt < this.total) {
 		
-			let $tr = $(`<tr><td colspan=${this.colspan} data-more>...</td><tr>`).appendTo ($tbody)
+			let $tr = $(`<tr><td colspan=${this.colspan} data-more>...</td></tr>`).appendTo ($tbody)
 			
 			this.observe ()
 
