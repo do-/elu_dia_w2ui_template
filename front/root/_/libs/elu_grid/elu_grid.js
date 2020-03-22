@@ -58,7 +58,33 @@ function sort (e) {
 
 }
 
+function filter (e) {
+
+	let {target} = e, $input = $(target), field = target.name
+	
+	let grid = $input.closest ('header').nextAll ('main').children ().data ('grid')
+
+	let search = (grid.data.search || []).filter (i => i.field != field)
+	
+	let value = $input.val (); if (value) search.push ({field, type: 'text', operator: "begins", value})
+
+	grid.search (search)
+
+}
+
 let Grid = class {
+
+	///////////////////////////////////////////////////////////////////////////////
+
+	async search (search) {
+
+		this.data.search = search
+		
+		this.data.searchLogic = 'AND'
+				
+		return this.reload ()
+	
+	}
 
 	///////////////////////////////////////////////////////////////////////////////
 
@@ -253,7 +279,9 @@ let Grid = class {
 		let {$header_table} = this; if (!$header_table) return
 
 		$('th[data-sort]', $header_table).click (sort)
-	
+
+		$('input', $header_table).change (filter)
+
 	}
 
 	///////////////////////////////////////////////////////////////////////////////
