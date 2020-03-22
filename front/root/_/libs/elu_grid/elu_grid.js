@@ -207,13 +207,25 @@ let Grid = class {
 	
 	///////////////////////////////////////////////////////////////////////////////
 	
+	clear_widths ($jq) {
+	
+		if ($jq) $('td, th', $jq).each ((i, t) => {
+		
+			$(t).removeAttr ('width')
+		
+		})
+	
+	}
+	
+	///////////////////////////////////////////////////////////////////////////////
+	
 	copy_widths () {
 	
 		let {$table} = this, cnt = $('col', $table).length
 		
 		for (let $tr of $('tr', $table).toArray ()) {
 		
-			let w = this.get_widths ($tr)
+			let w = this.get_widths ($tr)			
 
 			if (w.length != cnt || !w [0]) continue
 
@@ -224,6 +236,9 @@ let Grid = class {
 			break
 
 		}
+
+		this.clear_widths ($table)
+		this.clear_widths (this.$header_table)
 		
 	}	
 
@@ -458,7 +473,7 @@ let Grid = class {
 		
 		this.check_colspan ()
 		
-		$('<col>'.repeat (this.colspan)).prependTo ($table).wrap ('<colgroup>')
+		$('<colgroup>' + '<col>'.repeat (this.colspan) + '</colgroup>').prependTo ($table)
 
 	}
 
