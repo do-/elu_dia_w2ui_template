@@ -211,8 +211,12 @@ let Grid = class {
 	
 		if ($jq) $('td, th', $jq).each ((i, t) => {
 		
-			$(t).removeAttr ('width')
+			const k = 'width'
 		
+			if (t.attributes [k]) t.removeAttribute (k)
+
+			if (t.style [k]) t.style [k] = null
+
 		})
 	
 	}
@@ -398,7 +402,9 @@ let Grid = class {
 			this.observe ()
 
 		}
-
+		
+		this.clear_widths ($($template [0].content).children ())
+		
 		this.unlock ()
 
 	}
