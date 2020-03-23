@@ -66,7 +66,12 @@ function filter (e) {
 
 	let search = (grid.data.search || []).filter (i => i.field != field)
 	
-	let value = $input.val (); if (value) search.push ({field, type: 'text', operator: "begins", value})
+	let value = $input.val (); if (value) search.push ({
+		field, 
+		value,
+		type: 'text', 
+		operator: target.getAttribute ('data-op') || 'begins', 
+	})
 
 	grid.search (search)
 
