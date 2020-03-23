@@ -2,7 +2,7 @@
 
 $_DO.create_users_ = async function (o) {
 
-	show_block ('user_new')
+	show_block ('user_new_')
 
 }
 
