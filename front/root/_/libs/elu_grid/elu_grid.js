@@ -280,7 +280,7 @@ let Grid = class {
 
 		$('th[data-sort]', $header_table).click (sort)
 
-		$('input', $header_table).change (filter)
+		$('input', $header_table).on ('search', filter)
 
 	}
 
