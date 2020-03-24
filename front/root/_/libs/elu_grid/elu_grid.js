@@ -539,6 +539,47 @@ $.fn.draw_table = async function (o) {
 
 }
 
+
+
+
+
+
+
+$.fn.draw_popup = async function (o) {
+	
+	let $body = $(document.body)
+	
+	$('.elu_lock', $body).remove ()
+	$('<div class=elu_lock>').appendTo ($body)
+
+	let $div = $('<div class=elu_popup>')
+		.css ({width: this.attr ('width')})
+	
+	let $header = $('<header>').appendTo ($div)
+	
+	$('<span>').text (this.attr ('title')).appendTo ($header)
+	$('<button>').appendTo ($header)
+	
+	$div.append (this).css ({visibility: 'hidden'})
+
+	$div.appendTo ($body)
+	
+	let gap = k => Math.floor (($body [k] () - $div [k] ()) / 2)
+
+	$div.css ({
+		left: gap ('width'),
+		top: gap ('height'),
+		visibility: 'visible',
+	})
+
+}
+
+
+
+
+
+
+
 })(jQuery)
 
 1;
