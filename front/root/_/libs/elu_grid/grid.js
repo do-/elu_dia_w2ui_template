@@ -1,39 +1,5 @@
 (($) => {
 
-var $the_col = null
-
-function resize_move (e) {
-
-	if (!$the_col) return
-		
-	let grid = $the_col.data ('grid'), {widths} = grid
-
-	widths [$the_col.prevAll ('.resize').length] += (e.pageX - $the_col.offset ().left)
-
-	grid.set_widths (widths)
-	
-}
-
-function resize_stop (e) {
-	
-	$the_col.closest ('.elu_grid')
-		.off ('mousemove', resize_move)
-		.off ('mouseup', resize_stop)
-
-	$the_col = null
-
-}
-
-function resize_start (e) {
-
-	$the_col = $(e.target)
-
-	$the_col.closest ('.elu_grid')
-		.on ('mousemove', resize_move)
-		.on ('mouseup',   resize_stop)
-
-}
-
 function more (l) {
 
 	let e = l [0]; if (!e.isIntersecting) return 
@@ -213,27 +179,25 @@ let Grid = class {
 
 	add_resizers () {
 
-		let grid = this, {$table} = grid, $div = $table.closest ('.elu_grid'), left = 0
+		let grid = this, {$table} = grid, s = 0
 
-		let $span = $('<span />').prependTo ($div)
+		$table.closest ('.elu_grid').prepend (
+		
+			grid.resizers = $('col', $table).toArray ()
+			
+				.map (col => parseInt ((col.style.width || '0').replace ('px', '')))
+				
+				.map (width => new GridColResizer (grid, s += width).$div)
+				
+/*			
+				.map (width => $('<div class=resize>')
+					.css ({left: s += width})
+					.data ('grid', grid)
+					.on ('mousedown', resize_start)
+				)
+*/				
+		)
 
-		$('col', $table).each (function () {
-		
-			let {width} = this.style; if (!width) return
-			
-			left += parseInt (width.replace ('px', ''))
-					
-			grid.resizers.push ($('<div class=resize>')
-				.css ({left})
-				.data ('grid', grid)
-				.on ('mousedown', resize_start)
-				.appendTo ($span)
-			)
-			
-		})
-		
-		$('div', $span).unwrap ()
-	
 	}
 	
 	///////////////////////////////////////////////////////////////////////////////
