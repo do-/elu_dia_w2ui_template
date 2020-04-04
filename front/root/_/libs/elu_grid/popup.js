@@ -2,57 +2,84 @@
 
 class Popup {
 
+	unlock () {
+
+		$('.elu_lock').remove ()
+
+	}
+
+	lock () {
+	
+		this.unlock ()
+
+		$('<div class=elu_lock>').appendTo ($(document.body))
+
+	}
+
+	close () {
+
+		this.$body.off ('keyup', this.keyup)
+
+		this.$div.remove ()
+
+		if ($('.elu_popup').length == 0) this.unlock ()
+
+	}
+
+	confirm_close (e) {
+
+		if (e.keyCode != 27 || e.ctrlKey || e.altKey || !confirm ('Закрыть окно диалога?')) return
+
+		this.close ()
+
+		blockEvent (e)
+
+	}
+	
+	delta (dim) {
+	
+		let {$body, $div} = this; return $body [dim] () - $div [dim] ()
+	
+	}
+	
+	place (left, top) {
+	
+		this.$div.css ({left, top, visibility: 'visible'})
+	
+	}
+	
+	create_header (text) {
+
+		return $('<header>')
+		
+			.append ($('<span>'  ).text (text))
+		
+			.append ($('<button>').click (e => this.close ()))
+
+	}
+	
+	create_div (jq, o) {
+	
+		return $('<div class=elu_popup>')
+
+			.css ({width: jq.attr ('width'), visibility: 'hidden'})
+
+			.append (this.create_header (jq.attr ('title')))
+
+			.append (jq)
+
+	}
+
 	constructor (jq, o) {
 	
-		let $body = $(document.body)
-
-		$('.elu_lock', $body).remove ()
-		$('<div class=elu_lock>').appendTo ($body)
-
-		let $div = this.$div = $('<div class=elu_popup>')
-
-			.css ({width: jq.attr ('width')})
-
-		let $header = $('<header>').appendTo ($div)
-
-		$('<span>').text (jq.attr ('title')).appendTo ($header)
-
-		let close = () => {
-
-			$div.remove ()
-
-			if ($('.elu_popup').length == 0) $('.elu_lock').remove ()
-
-		}
-
-		let confirm_close = (e) => {
-
-			if (e.keyCode != 27 || e.ctrlKey || e.altKey || !confirm ('Закрыть окно диалога?')) return
-
-			close ()
-
-			$body.off ('keyup', confirm_close)
-
-			blockEvent (e)
-
-		}
-
-		$body.on ('keyup', confirm_close)
-
-		$('<button>').appendTo ($header).click (close)
-
-		$div.append (jq).css ({visibility: 'hidden'})
-
-		$div.appendTo ($body)
-
-		let gap = k => Math.floor (($body [k] () - $div [k] ()) / 2)
-
-		$div.css ({
-			left: gap ('width'),
-			top: gap ('height'),
-			visibility: 'visible',
-		})
+		this.lock ()
 	
+		this.$div = this.create_div (jq, o).appendTo (this.$body = $(document.body))
+	
+		this.$body.on ('keyup', this.keyup = e => this.confirm_close (e))
+
+		this.place (this.delta ('width') / 2, this.delta ('height') / 2)
+
 	}
 
 }
