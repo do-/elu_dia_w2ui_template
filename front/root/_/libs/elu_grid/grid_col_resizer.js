@@ -1,48 +1,37 @@
-var $the_col = null
-
-function resize_move (e) {
-
-	if (!$the_col) return
-		
-	let grid = $the_col.data ('grid'), {widths} = grid
-
-	widths [$the_col.prevAll ('.resize').length] += (e.pageX - $the_col.offset ().left)
-
-	grid.set_widths (widths)
-	
-}
-
-function resize_stop (e) {
-	
-	$the_col.closest ('.elu_grid')
-		.off ('mousemove', resize_move)
-		.off ('mouseup', resize_stop)
-
-	$the_col = null
-
-}
-
-function resize_start (e) {
-
-	$the_col = $(e.target)
-
-	$the_col.closest ('.elu_grid')
-		.on ('mousemove', resize_move)
-		.on ('mouseup',   resize_stop)
-
-}
-
 class GridColResizer {
+	
+	events (cb) {
+	
+		let $top_div = this.$div.closest ('.elu_grid')
+
+		for (let [event, handler] of this.event_handlers) cb ($top_div, event, handler)
+
+	}
+
+	move (e) {
+
+		let {grid, $div} = this, {widths} = grid
+
+		widths [$div.prevAll ('.resize').length] += (e.pageX - $div.offset ().left)
+
+		grid.set_widths (widths)
+
+	}
 
 	constructor (grid, left) {
-	
+
 		this.grid = grid
-		
+
+		this.event_handlers = Object.entries ({
+			mousemove : e => this.move (e),
+			mouseup   : e => this.events (($div, event, handler) => $div.off (event, handler)),
+		})
+
 		this.$div = $('<div class=resize>')
 			.css ({left})
 			.data ('grid', grid)
-			.on ('mousedown', resize_start)		
-			
+			.on ('mousedown', e => this.events (($div, event, handler) => $div.on (event, handler)))
+
 	}
 
 }

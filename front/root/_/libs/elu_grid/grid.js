@@ -182,20 +182,13 @@ let Grid = class {
 		let grid = this, {$table} = grid, s = 0
 
 		$table.closest ('.elu_grid').prepend (
-		
+
 			grid.resizers = $('col', $table).toArray ()
-			
+
 				.map (col => parseInt ((col.style.width || '0').replace ('px', '')))
-				
+
 				.map (width => new GridColResizer (grid, s += width).$div)
-				
-/*			
-				.map (width => $('<div class=resize>')
-					.css ({left: s += width})
-					.data ('grid', grid)
-					.on ('mousedown', resize_start)
-				)
-*/				
+
 		)
 
 	}
