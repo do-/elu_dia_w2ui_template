@@ -16,6 +16,40 @@ class Popup {
 
 	}
 
+	events (cb) {
+	
+		for (let [event, handler] of this.event_handlers) cb (this.$body, event, handler)
+
+	}
+
+	keep (e) {
+	
+		this.x = e.screenX
+		
+		this.y = e.screenY
+
+	}
+	
+	start (e) {
+	
+		this.keep (e)
+		
+		this.events (($body, event, handler) => $body.on (event, handler))
+
+	}
+	
+	move (e) {
+	
+		let {screenX, screenY} = e, {x, y} = this
+	
+		let gap = k => parseInt (this.$div.css (k).replace (/\D/g, ''))
+	
+		this.place (gap ('left') + screenX - x, gap ('top') + screenY - y)
+
+		this.keep (e)
+	
+	}
+	
 	close () {
 
 		this.$body.off ('keyup', this.keyup)
@@ -77,8 +111,17 @@ class Popup {
 		this.$div = this.create_div (jq, o).appendTo (this.$body = $(document.body))
 	
 		this.$body.on ('keyup', this.keyup = e => this.confirm_close (e))
+		
+		let half = x => Math.floor (x / 2)
 
-		this.place (this.delta ('width') / 2, this.delta ('height') / 2)
+		this.place (half (this.delta ('width')), half (this.delta ('height')))
+
+		this.event_handlers = Object.entries ({
+			mousemove : e => this.move (e),
+			mouseup   : e => this.events (($body, event, handler) => $body.off (event, handler)),
+		})
+		
+		$('header', this.$div).on ('mousedown', e => this.start (e))
 
 	}
 
