@@ -1,26 +1,4 @@
-(($) => {
-
-class Popup {
-
-	unlock () {
-
-		$('.elu_lock').remove ()
-
-	}
-
-	lock () {
-	
-		this.unlock ()
-
-		$('<div class=elu_lock>').appendTo ($(document.body))
-
-	}
-
-	events (cb) {
-	
-		for (let [event, handler] of this.event_handlers) cb (this.$body, event, handler)
-
-	}
+elu.Popup = class {
 
 	keep (e) {
 	
@@ -34,7 +12,7 @@ class Popup {
 	
 		this.keep (e)
 		
-		this.events (($body, event, handler) => $body.on (event, handler))
+		this.$body.on (this.move_handlers)
 
 	}
 	
@@ -56,7 +34,7 @@ class Popup {
 
 		this.$div.remove ()
 
-		if ($('.elu_popup').length == 0) this.unlock ()
+		if ($('.elu_popup').length == 0) elu.unlock ()
 
 	}
 
@@ -106,9 +84,9 @@ class Popup {
 
 	constructor (jq, o) {
 	
-		this.lock ()
+		elu.lock ()
 	
-		this.$div = this.create_div (jq, o).appendTo (this.$body = $(document.body))
+		this.$div = this.create_div (this.$src = jq, o).appendTo (this.$body = $(document.body))
 	
 		this.$body.on ('keyup', this.keyup = e => this.confirm_close (e))
 		
@@ -116,23 +94,13 @@ class Popup {
 
 		this.place (half (this.delta ('width')), half (this.delta ('height')))
 
-		this.event_handlers = Object.entries ({
+		this.move_handlers = {
 			mousemove : e => this.move (e),
-			mouseup   : e => this.events (($body, event, handler) => $body.off (event, handler)),
-		})
+			mouseup   : e => this.$body.off (this.move_handlers)
+		}
 		
 		$('header', this.$div).on ('mousedown', e => this.start (e))
 
 	}
 
-}
-
-$.fn.draw_popup = async function (o) {
-	
-	return new Popup (this, o)
-
-}
-
-})(jQuery)
-
-1;
+};
