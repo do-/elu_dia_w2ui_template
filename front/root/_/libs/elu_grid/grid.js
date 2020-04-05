@@ -187,7 +187,7 @@ let Grid = class {
 
 				.map (col => parseInt ((col.style.width || '0').replace ('px', '')))
 
-				.map (width => new GridColResizer (grid, s += width).$div)
+				.map (width => new elu.GridColResizer (grid, s += width).$div)
 
 		)
 
@@ -454,7 +454,7 @@ let Grid = class {
 		
 		this.$table = $table
 		$table.wrap ('<div class=elu_grid>')
-
+		this.$div = $table.parent ()
 
 	}
 	
