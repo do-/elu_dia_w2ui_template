@@ -1,106 +1,122 @@
-elu.Popup = class {
+(() => {
 
-	keep (e) {
+	const CLAZZ = elu.css ('popup'), SEL = '.' + CLAZZ
 	
-		this.x = e.screenX
-		
-		this.y = e.screenY
+	elu.Popup = class {
 
-	}
-	
-	start (e) {
-	
-		this.keep (e)
-		
-		this.$body.on (this.move_handlers)
+		keep (e) {
 
-	}
-	
-	move (e) {
-	
-		let {screenX, screenY} = e, {x, y} = this
-	
-		let gap = k => parseInt (this.$div.css (k).replace (/\D/g, ''))
-	
-		this.place (gap ('left') + screenX - x, gap ('top') + screenY - y)
+			this.x = e.screenX
 
-		this.keep (e)
-	
-	}
-	
-	close () {
+			this.y = e.screenY
 
-		this.$body.off ('keyup', this.keyup)
+		}
 
-		this.$div.remove ()
+		start (e) {
 
-		if ($('.elu_popup').length == 0) elu.unlock ()
+			this.keep (e)
 
-	}
+			this.$body.on (this.move_handlers)
 
-	confirm_close (e) {
+		}
 
-		if (e.keyCode != 27 || e.ctrlKey || e.altKey || !confirm ('Закрыть окно диалога?')) return
+		move (e) {
 
-		this.close ()
+			let {screenX, screenY} = e, {x, y} = this
 
-		blockEvent (e)
+			let gap = k => parseInt (this.$div.css (k).replace (/\D/g, ''))
 
-	}
-	
-	delta (dim) {
-	
-		let {$body, $div} = this; return $body [dim] () - $div [dim] ()
-	
-	}
-	
-	place (left, top) {
-	
-		this.$div.css ({left, top, visibility: 'visible'})
-	
-	}
-	
-	create_header (text) {
+			this.place (gap ('left') + screenX - x, gap ('top') + screenY - y)
 
-		return $('<header>')
-		
-			.append ($('<span>'  ).text (text))
-		
-			.append ($('<button>').click (e => this.close ()))
+			this.keep (e)
 
-	}
-	
-	create_div (jq, o) {
-	
-		return $('<div class=elu_popup>')
+		}
 
-			.css ({width: jq.attr ('width'), visibility: 'hidden'})
+		close () {
 
-			.append (this.create_header (jq.attr ('title')))
+			this.$body.off ('keyup', this.keyup)
 
-			.append (jq)
+			this.$div.remove ()
 
-	}
+			if ($(SEL).length == 0) elu.unlock ()
 
-	constructor (jq, o) {
-	
-		elu.lock ()
-	
-		this.$div = this.create_div (this.$src = jq, o).appendTo (this.$body = $(document.body))
-	
-		this.$body.on ('keyup', this.keyup = e => this.confirm_close (e))
-		
-		let half = x => Math.floor (x / 2)
+		}
 
-		this.place (half (this.delta ('width')), half (this.delta ('height')))
+		confirm_close (e) {
 
-		this.move_handlers = {
-			mousemove : e => this.move (e),
-			mouseup   : e => this.$body.off (this.move_handlers)
+			if (e.keyCode != 27 || e.ctrlKey || e.altKey || !confirm ('Закрыть окно диалога?')) return
+
+			this.close ()
+
+			blockEvent (e)
+
+		}
+
+		delta (dim) {
+
+			let {$body, $div} = this; return $body [dim] () - $div [dim] ()
+
+		}
+
+		place (left, top) {
+
+			this.$div.css ({left, top, visibility: 'visible'})
+
+		}
+
+		create_header (text) {
+
+			return $('<header>')
+
+				.append ($('<span>'  ).text (text))
+
+				.append ($('<button>').click (e => this.close ()))
+
+		}
+
+		create_div (jq, o) {
+
+			return $('<div>')
+				
+				.attr ({class: CLAZZ})
+
+				.css ({width: jq.attr ('width'), visibility: 'hidden'})
+
+				.append (jq)
+
 		}
 		
-		$('header', this.$div).on ('mousedown', e => this.start (e))
+		add_header (title) {
+		
+			if (title == null) return
+		
+			this.$div.prepend (this.create_header (title))
+
+			this.$body.on ('keyup', this.keyup = e => this.confirm_close (e))
+
+			this.move_handlers = {
+				mousemove : e => this.move (e),
+				mouseup   : e => this.$body.off (this.move_handlers)
+			}
+
+			$('header', this.$div).on ('mousedown', e => this.start (e))
+
+		}
+
+		constructor (jq, o = {}) {
+
+			elu.lock ()
+
+			this.$div = this.create_div (this.$src = jq, o).appendTo (this.$body = $(document.body))
+			
+			this.add_header (o.title || jq.attr ('title'))
+
+			let half = x => Math.floor (x / 2)
+
+			this.place (half (this.delta ('width')), half (this.delta ('height')))
+
+		}
 
 	}
 
-};
+})();
