@@ -8,7 +8,7 @@
 
 		elu.unlock ()
 
-		$(document.body).append ($('<div>').attr ('class', CLAZZ))
+		$(document.body).append ($('<div>').attr ('class', CLAZZ).css ('z-index', elu.z_index ++))
 
 	}
 
