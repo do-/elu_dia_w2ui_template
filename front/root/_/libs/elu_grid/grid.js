@@ -111,7 +111,8 @@ let Grid = class {
 
 		let $header_table = this.$header_table = $table.clone ().removeAttr ('id')
 		$('tbody', $header_table).remove ()
-		$header_table.prependTo ($table.parent ()).wrap ('<header />').parent ().css ({height})
+
+		$header_table.wrap ('<header />').parent ().css ({height}).insertBefore ($table)
 
 		$thead.remove ()
 
@@ -452,9 +453,14 @@ let Grid = class {
 		this.cnt = 0
 		this.limit = o.limit || 50
 		
+		let $caption = $('caption', $table)
+
 		this.$table = $table
 		$table.wrap ('<div class=elu_grid>')
 		this.$div = $table.parent ()
+		
+		$('header', $caption).prependTo (this.$div)
+		$('footer', $caption).appendTo  (this.$div)
 
 	}
 	
