@@ -1,6 +1,9 @@
-div.elu_popup {
+dialog.elu_popup {
 
 	background: #eee;
+	border: 1px solid #c5c5c5;
+	border-radius: 4px;
+	padding: 0;
 
 	header {
 		.font ();
@@ -10,7 +13,7 @@ div.elu_popup {
 		padding: 6px;
 		background-image: linear-gradient(#ececec,#dfdfdf);
 		text-align: center;
-		cursor: move;
+		/*cursor: move;*/
 		
 		button {
 			outline: none;
@@ -36,6 +39,10 @@ div.elu_popup {
   			}			
 		}
 		
+	}
+	
+	&::backdrop {
+
 	}
 
 }
