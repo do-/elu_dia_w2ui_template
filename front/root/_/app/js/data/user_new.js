@@ -8,11 +8,11 @@ $_DO.update_user_new = async function (e) {
         
     f.lock ()
 
-    let item = await response ({action: 'create', id: new_uuid ()}, {data})
+    let item = await response ({type: 'users', action: 'create', id: new_uuid ()}, {data})
 
-	w2_close_popup_reload_grid ()
-
-    w2_confirm_open_tab ('Пользователь зарегистрирован. Открыть его карточку?', '/user/' + item.uuid)
+    open_tab ('/user/' + item.uuid)
+    
+    reload_page ()
 
 }
 
