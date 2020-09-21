@@ -207,7 +207,7 @@ let Grid = class {
 
 		$table.closest ('.elu_grid').prepend (
 
-			grid.resizers = $('col', $table).toArray ()
+			grid.resizers = $('col[style]', $table).toArray ()
 
 				.map (col => parseInt ((col.style.width || '0').replace ('px', '')))
 
