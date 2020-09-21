@@ -112,7 +112,30 @@ let Grid = class {
 		let $header_table = this.$header_table = $table.clone ().removeAttr ('id')
 		$('tbody', $header_table).remove ()
 
-		$header_table.wrap ('<header />').parent ().css ({height}).insertBefore ($table)
+		let $id = $header_table.wrap ('<header />').parent ().css ({height}).insertBefore ($table)
+		
+		$('input[type=search][data-editor]', $header_table).each ((i, input) => {
+
+			let {name} = input, $label = $(input)
+
+			let $id = $(`input[type=hidden][name=${name}]`, $header_table)
+
+			if ($id.length == 0) $id = $(`<input name=${name} type=hidden>`).insertAfter ($label)
+			
+			let tick, dial = async () => {
+			
+				let result = await show_dialog ($label.attr ('data-editor'), {grid: this, '$id': $id, '$label': $label})
+				
+				darn ({result})
+			
+			}
+			
+			$label
+				.on ('click',  () => tick = setTimeout (dial, 10))
+				.on ('search', () => clearTimeout (tick))
+				.on ('focus',  () => input.blur ())
+
+		})
 
 		$thead.remove ()
 

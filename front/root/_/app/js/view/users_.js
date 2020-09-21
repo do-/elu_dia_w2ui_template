@@ -17,9 +17,11 @@ $_DRAW.users_ = async function (data) {
     	}
     
     })
+   
+//	$('input[name=id_role][type=search]', $view.data ('grid').$header_table).click (() => alert (1))		
 
     return $view
-    
+
 /*
     $('main').w2regrid ({ 
     
