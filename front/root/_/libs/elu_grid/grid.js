@@ -95,7 +95,17 @@ let Grid = class {
 		
 		let $tr = $('tr:first', this.$table); if (!$tr.length) return
 		
-		this.colspan = $('th, td', $tr).toArray ().reduce ((a, t) => a += parseInt ($(t).attr ('colspan')) || 1, 0)
+		let a = []
+		
+		for (let t of $('th, td', $tr).toArray ()) {
+		
+			let $t = $(t), n = $t.is ('[noresize]') ? 1 : 0, c = parseInt ($t.attr ('colspan')) || 1
+
+			for (let i = 0; i < c; i ++) a.push (n)
+				
+		}
+		
+		this.noresize = a
 	
 	}
 		
@@ -203,17 +213,21 @@ let Grid = class {
 
 	add_resizers () {
 
-		let grid = this, {$table} = grid, s = 0
+		let grid = this, {$table} = grid, s = 0, $divs = [], cols = $('col', $table).toArray ()
+		
+		cols.pop (); for (let col of cols) {
+		
+			let width = parseInt ((col.style.width || '0').replace ('px', ''))
+			
+			let {$div} = new elu.GridColResizer (grid, s += width)
+			
+			if ($(col).is ('[noresize]')) $div.hide ()
+			
+			$divs.push ($div)
 
-		$table.closest ('.elu_grid').prepend (
-
-			grid.resizers = $('col[style]', $table).toArray ()
-
-				.map (col => parseInt ((col.style.width || '0').replace ('px', '')))
-
-				.map (width => new elu.GridColResizer (grid, s += width).$div)
-
-		)
+		}
+		
+		$table.closest ('.elu_grid').prepend (grid.resizers = $divs)
 
 	}
 	
@@ -495,10 +509,24 @@ let Grid = class {
 		$('col', $table).remove ()
 
 		let $tr = $('tr:first', $table); if (!$tr.length) return
-		
+
 		this.check_colspan ()
 		
-		$('<colgroup>' + '<col>'.repeat (this.colspan) + '</colgroup>').prependTo ($table)
+		let html = '<colgroup>'
+
+			for (let i of this.noresize) {
+
+				html += '<col'
+
+					if (i) html += ' noresize'
+
+				html += '>'
+
+			}
+
+		html += '</colgroup>'
+		
+		$(html).prependTo ($table)
 
 	}
 
