@@ -4,14 +4,25 @@
 	data-popup-title='Фильтр'
 >
 
-	<table width=100% height=100% cellpadding=0 cellspacing=0>
+	<style>
+		table.top[data-block-name=_grid_filter_checkboxes] {
+			height: 100%;
+			background: white;
+		}
+
+		td[data-block-name=_grid_filter_checkboxes][noresize] {
+			width: 25px;
+		}
+	</style>
+
+	<table class=top cellpadding=0 cellspacing=0 width=100%	>
 		<tr>
 			<td>
 				<table id=_grid_filter_checkboxes_grid >
 
 					<tbody>
 							<tr data-list=voc.items>
-								<td><input type=checkbox data-value=id>
+								<td noresize><input type=checkbox data-value=id>
 								<td data-text=label>
 							</tr>
 					</tbody>
@@ -19,7 +30,7 @@
 				</table>
 
 		<tr height=30>
-			<td>
+			<th>
 				<button name=update>OK</button>
 	</table>
 

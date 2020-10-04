@@ -404,7 +404,8 @@ let Grid = class {
 		let [list] = Object.values (cnt_all).filter (Array.isArray)
 		
 		let $template = $('tbody>template', this.$table)
-		
+darn(this.$table)		
+darn(this.$table.data ('data'))		
 		let data = clone (this.$table.data ('data'))
 		
 		let key = $template.attr ('data-list')
