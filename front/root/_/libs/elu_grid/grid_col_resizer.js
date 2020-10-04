@@ -13,9 +13,16 @@ elu.GridColResizer = class {
 		grid.set_widths (widths)
 
 	}
+	
+	pos (left) {
+		left --
+		this.$div.css ({left})
+	}
 
-	constructor (grid, left) {
-
+	constructor (grid, o) {
+	
+		let {left, off} = o
+		
 		this.grid = grid
 
 		this.move_handlers = {
@@ -30,7 +37,12 @@ elu.GridColResizer = class {
 			.attr ('class', CLAZZ)
 			.css  ({left})
 			.data ('grid', grid)
+			.data ('resizer', this)
 			.on   ('mousedown', e => this.grid.$div.on (this.move_handlers))
+			
+		this.pos (left)
+		
+		if (off) this.$div.hide ()
 
 	}
 

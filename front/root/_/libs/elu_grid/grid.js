@@ -182,14 +182,8 @@ let Grid = class {
 		this.widths = w
 			
 		for (let k of ['$header_table', '$table']) this.set_table_col_widths (this [k], w)
-		
-		let left = 0; for (let i = 0; i < this.resizers.length; i ++) {
-		
-			left += w [i]
-			
-			this.resizers [i].css ({left})
-			
-		}
+
+		let left = 0, {resizers} = this; for (let i = 0; i < resizers.length; i ++) resizers [i].pos (left += w [i])
 	
 	}
 
@@ -213,21 +207,23 @@ let Grid = class {
 
 	add_resizers () {
 
-		let grid = this, {$table} = grid, s = 0, $divs = [], cols = $('col', $table).toArray ()
-		
+		let grid = this, {$table} = grid, s = 0, a = [], cols = $('col', $table).toArray ()
+
 		cols.pop (); for (let col of cols) {
-		
+
 			let width = parseInt ((col.style.width || '0').replace ('px', ''))
-			
-			let {$div} = new elu.GridColResizer (grid, s += width)
-			
-			if ($(col).is ('[noresize]')) $div.hide ()
-			
-			$divs.push ($div)
+
+			a.push (new elu.GridColResizer (grid, {
+
+				left : s += width, 
+
+				off  : $(col).is ('[noresize]')
+
+			}))
 
 		}
-		
-		$table.closest ('.elu_grid').prepend (grid.resizers = $divs)
+
+		$table.closest ('.elu_grid').prepend ((grid.resizers = a).map (r => r.$div))
 
 	}
 	
@@ -404,8 +400,7 @@ let Grid = class {
 		let [list] = Object.values (cnt_all).filter (Array.isArray)
 		
 		let $template = $('tbody>template', this.$table)
-darn(this.$table)		
-darn(this.$table.data ('data'))		
+		
 		let data = clone (this.$table.data ('data'))
 		
 		let key = $template.attr ('data-list')
