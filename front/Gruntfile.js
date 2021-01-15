@@ -3,6 +3,52 @@ module.exports = function (grunt) {
   require('jit-grunt')(grunt);
   
   grunt.initConfig ({
+  
+    copy: {
+
+      index: {
+        src: "root/index.html.template",
+        dest: "root/index.html",
+        options: {
+
+          process: function(content, srcpath) {
+
+            let git       = p => grunt.file.read ("../.git/" + p)
+
+            let [, head]  = git ("HEAD").replace (/\s/gm, "").split (":")
+            let ver       = new Date ().toJSON ().replace (/\D/g, "_") + git (head).slice (0, 7)
+
+            let templates = ''
+
+            for (let name of [
+            	'login',
+            ]) {
+
+            	let id = `html/${name}.html`, html = grunt.file.read ('root/_/app/' + id).
+
+            	replace (/<([a-z]+)(.*?)\/>/gm, (m, tag, attr) => {
+
+            		switch (tag.toUpperCase ()) {
+            			case 'DIV':
+            			case 'SPAN':
+            				return `<${tag}${attr}></${tag}>`
+            			default:
+            				return m
+            		}
+
+            	})
+
+            	templates += `\n<template id="${id}">${html}</template>`
+
+            }
+
+			return content.replace ("${ver}", ver).replace ("${templates}", templates)
+
+          }
+
+        }
+      }
+    },  
    
     less: {
       development: {
@@ -17,28 +63,7 @@ module.exports = function (grunt) {
         }
       }
     },
-    
-    bump: {
-      options: {
-        files: ['package.json'],
-        updateConfigs: [],
-        commit: false,
-        createTag: false,
-        push: false
-      }
-    },
-    
-    replace: {
-      versionNumber: {
-        src: ['root/index.html'],
-        overwrite: true,
-        replacements: [{
-          from: /var ver.*/,
-          to: "var ver = '<%= grunt.file.readJSON ('package.json') ['version'] %>';"
-        }]
-      }
-    },
-        
+                
     concat: {
         options: {
             stripBanners: true,
@@ -56,11 +81,7 @@ module.exports = function (grunt) {
             dest: 'root/_/app/js/_.js',
         },
     },    
-/*    
-    shell: {
-        reboot: {command: '/etc/init.d/elu_dia_w2ui_template restart'}
-    },
-*/
+
     compress: {
       xslt: {
         options: {mode: 'gzip'},
@@ -86,12 +107,6 @@ module.exports = function (grunt) {
 
     watch: {
 
-      general: {
-        files: ['root/**/*.*'],
-        tasks: ['bump', 'replace'],
-        options: {nospawn: true}
-      },
-
       styles: {
         files: ['root/_/libs/elu_dia_w2ui_template/*.less'],
         tasks: ['less'],
@@ -99,25 +114,29 @@ module.exports = function (grunt) {
       },
 
       js: {
-        files: ['root/_/app/js/data/*.js', 'root/_/app/js/view/*.js', 'root/_/app/handler.js'],
-        tasks: ['concat:js'],
+        files: [
+        	'root/_/app/js/data/*.js', 
+        	'root/_/app/js/view/*.js', 
+        	'root/_/app/handler.js'
+        ],
+        tasks: ['copy:index', 'concat:js'],
         options: {nospawn: true}
       },
-/*
-      model: {
-        files: ['../back/lib/Model/*.pm', '../back/lib/Config.pm'],
-        tasks: ['shell:reboot'],
+
+      general: {
+        files: ['root/_/app/html/*.html'],
+        tasks: ['copy:index'],
         options: {nospawn: true}
       },
-*/
+
     }
-    
-  });
+
+  })
   
-  grunt.loadNpmTasks('grunt-text-replace');
-  grunt.loadNpmTasks('grunt-contrib-compress');
-  
-  grunt.registerTask('default', ['watch']);
-  grunt.registerTask('build', ['replace', 'less', 'concat', 'compress']);
-  
-};
+  grunt.loadNpmTasks ('grunt-contrib-copy')
+  grunt.loadNpmTasks ('grunt-contrib-compress')
+
+  grunt.registerTask ('default', ['watch'])
+  grunt.registerTask ('build', ['copy:index', 'less', 'concat', 'compress'])
+
+}
