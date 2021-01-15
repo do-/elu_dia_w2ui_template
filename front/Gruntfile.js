@@ -52,6 +52,10 @@ module.exports = function (grunt) {
                 'root/_/app/handler.js',
                 'root/_/app/js/data/*.js',
                 'root/_/app/js/view/*.js',
+
+                '../slices/*/front/root/_/app/js/data/*.js',
+                '../slices/*/front/root/_/app/js/view/*.js',
+
             ],
             dest: 'root/_/app/js/_.js',
         },
