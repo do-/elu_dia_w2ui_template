@@ -19,26 +19,36 @@ module.exports = function (grunt) {
             let ver       = new Date ().toJSON ().replace (/\D/g, "_") + git (head).slice (0, 7)
 
             let templates = ''
+            
+            function add_template (path, id) {
 
-            for (let name of [
-            	'login',
-            ]) {
+            	let html = grunt.file.read (path + '/' + id).
+            	
+					replace (/<([a-z]+)(.*?)\/>/gm, (m, tag, attr) => {
 
-            	let id = `html/${name}.html`, html = grunt.file.read ('root/_/app/' + id).
+						switch (tag.toUpperCase ()) {
+							case 'DIV':
+							case 'SPAN':
+								return `<${tag}${attr}></${tag}>`
+							default:
+								return m
+						}
 
-            	replace (/<([a-z]+)(.*?)\/>/gm, (m, tag, attr) => {
-
-            		switch (tag.toUpperCase ()) {
-            			case 'DIV':
-            			case 'SPAN':
-            				return `<${tag}${attr}></${tag}>`
-            			default:
-            				return m
-            		}
-
-            	})
+					})
 
             	templates += `\n<template id="${id}">${html}</template>`
+
+            }
+
+            add_template ('root/_/app', 'html/login.html')
+            
+            for (let path of grunt.file.expand ('../slices/*/front/root/_/app/html/*.html')) {
+            
+            	let parts = path.split ('/')
+            	
+            	let fn = parts.pop (), d = parts.pop ()
+
+	            add_template (parts.join ('/'), `${d}/${fn}`)
 
             }
 
@@ -128,7 +138,10 @@ module.exports = function (grunt) {
       },
 
       general: {
-        files: ['root/_/app/html/*.html'],
+        files: [
+        	'root/_/app/html/*.html',
+			'../slices/*/front/root/_/app/html/*.html',
+        ],
         tasks: ['copy:index'],
         options: {nospawn: true}
       },
