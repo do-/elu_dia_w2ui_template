@@ -22,7 +22,7 @@ module.exports = class {
 			}),
 
         }
-darn (this.pools.db.model)
+
     }
     
     setup_sessions () {
