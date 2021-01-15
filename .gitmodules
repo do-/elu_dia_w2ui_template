@@ -7,3 +7,9 @@
 [submodule "back/lib/Ext/Dia"]
 	path = back/lib/Ext/Dia
 	url = https://github.com/do-/dia.js.git
+[submodule "slices/users"]
+	path = slices/users
+	url = https://github.com/do-/elu_dia_w2ui_template_slice_users.git
+[submodule "slices/user_options"]
+	path = slices/user_options
+	url = https://github.com/do-/elu_dia_w2ui_template_slice_user_options.git
