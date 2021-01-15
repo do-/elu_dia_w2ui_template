@@ -1,6 +1,18 @@
+const fs  = require ('fs')
 const Dia = require ('./Ext/Dia/Dia.js')
 
 module.exports = class extends Dia.DB.Model {
+
+    constructor (conf) {
+		
+		let root = '../../slices', paths = [
+			'./Model/', 
+			...fs.readdirSync (root).map (i => `${root}/${i}/back/lib/Model`)
+		]
+
+        super ({conf, paths})
+        
+	}
 
     trg_check_column_values (tab) {
     	let sql = ''

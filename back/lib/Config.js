@@ -11,7 +11,7 @@ module.exports = class {
                 
         this.pools = {
         
-        	db       : Dia.DB.Pool (this.db, new (require ('./Model.js')) ({path: './Model'})),
+        	db       : Dia.DB.Pool (this.db, new (require ('./Model.js')) ()),
         	
             sessions : this.setup_sessions (),
             
@@ -22,7 +22,7 @@ module.exports = class {
 			}),
 
         }
-
+darn (this.pools.db.model)
     }
     
     setup_sessions () {
