@@ -26,23 +26,17 @@ module.exports = class {
     }
     
     setup_sessions () {
-    	
-    	let s = this.auth.sessions
 
-//  uncomment this unless memcached is available
-//    
-//      return new (require ('./Ext/Dia/Cache/MapTimer.js')) ({
-//      	name: 'session',
-//        	ttl : s.timeout * 60 * 1000,
-//      })
-        
-        return new (require ('./Ext/Dia/Cache/Memcached.js')) ({
-        	ttl : s.timeout * 60 * 1000,
-        	memcached: s.memcached,
-        })
+    	let {timeout, redis, memcached} = this.auth.sessions, ttl = timeout * 60 * 1000
+
+    	if (redis)		return new (require ('./Ext/Dia/Cache/Redis.js')) 		({ttl, redis})
+
+    	if (memcached)	return new (require ('./Ext/Dia/Cache/Memcached.js'))	({ttl, memcached})
+
+						return new (require ('./Ext/Dia/Cache/MapTimer.js'))	({ttl, name: 'session'})
 
     }
-    
+
     async init () {
     
 		let db = this.pools.db
