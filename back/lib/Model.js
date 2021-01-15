@@ -24,15 +24,19 @@ module.exports = class extends Dia.DB.Model {
     }
 
     on_before_parse_table_columns (table) {
+    
+    	if (!table.pk) {
+    	
+			let {columns} = table
 
-        let cols = table.columns
-        
-        if (cols.id) {
-            table.pk = 'id'
-        } 
-        else {
-            cols [table.pk = 'uuid'] = 'uuid'
-        }
+			if (columns.id) {
+				table.pk = 'id'
+			}
+			else {
+				columns [table.pk = 'uuid'] = 'uuid'
+			}
+
+    	}    
         
     }
 

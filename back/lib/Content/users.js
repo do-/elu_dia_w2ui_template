@@ -116,7 +116,7 @@ do_set_own_option_users:
 
         let voc_user_option = this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
 
-        if (!voc_user_option.is_own) throw '#foo#:Доступ запрещён'
+        if (!voc_user_option.is_own && this.user.role != 'admin') throw '#foo#:Доступ запрещён'
 
         let d = {
             id_user: this.user.id

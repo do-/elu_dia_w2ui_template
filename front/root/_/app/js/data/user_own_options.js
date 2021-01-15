@@ -14,17 +14,20 @@ $_DO.toggle_user_own_options = async function (e) {
 
     await response ({type: 'users', action: 'set_own_option'}, {data: data})
     
-    window.__LOGOUT__ = 1
-
-    $_USER.opt [r.name] = data.is_on
-
-    localStorage.removeItem ('user')
-    localStorage.setItem ('user', 1)
-    $_SESSION.set ('user', $_USER)
-
-    delete window.__LOGOUT__
+    if (data.id_voc_user_option == 1) {
     
-    location.reload ()
+		window.__LOGOUT__ = 1
+
+		$_USER.opt [r.name] = data.is_on
+
+		$_LOCAL.delete ('user')
+		$_LOCAL.set    ('user', $_USER)
+
+		delete window.__LOGOUT__
+
+		location.reload ()
+
+    }
 
 }
 
