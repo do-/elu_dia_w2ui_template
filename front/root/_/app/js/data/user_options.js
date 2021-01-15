@@ -3,7 +3,7 @@
 $_DO.toggle_user_options = async function (e) {
 
     var g = w2ui ['options_grid']
-    
+
     var data = {}
 
     var r = g.get (data.id_voc_user_option = e.recid)
@@ -12,7 +12,9 @@ $_DO.toggle_user_options = async function (e) {
 
     if (!confirm ((data.is_on ? 'Установить' : 'Снять') + ' опцию "' + r.label + '"?')) return
 
-    await response ({type: 'users', action: 'set_option'}, {data: data})
+    data.id_user = $_REQUEST.id
+
+    await response ({type: 'user_options', action: 'update'}, {data: data})
 
     g.request ('get')
 

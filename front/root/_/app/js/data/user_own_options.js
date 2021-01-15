@@ -12,7 +12,9 @@ $_DO.toggle_user_own_options = async function (e) {
 
     if (!confirm ((data.is_on ? 'Установить' : 'Снять') + ' опцию "' + r.label + '"?')) return
 
-    await response ({type: 'users', action: 'set_own_option'}, {data: data})
+	data.id_user = $_USER.id
+
+    await response ({type: 'user_options', action: 'update'}, {data: data})
     
     if (data.id_voc_user_option == 1) {
     

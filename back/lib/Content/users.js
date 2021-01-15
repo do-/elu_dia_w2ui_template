@@ -60,93 +60,7 @@ get_item_of_users:
         return data
 
     },
-    
-////////////////////////////////////////////////////////////////////////////////
 
-get_options_of_users: 
-
-    async function () {
-    
-        let user = await this.db.get ([{users: {uuid: this.rq.id}}, 'roles'])
-        
-        let filter = {'roles... LIKE': `% ${user['roles.name']} %`}
-        
-        return this.db.add ({}, [
-        
-            {voc_user_options: filter},
-            
-            {'user_options(is_on)': {
-                id_user: user.uuid,
-            }}
-
-        ])
-
-    },
-    
-////////////////////////////////////////////////////////////////////////////////
-
-do_set_option_users: 
-
-    async function () {
-    
-        if (this.user.role != 'admin') throw '#foo#:Доступ запрещён'
-
-        let d = {
-            id_user: this.rq.id,
-            uuid: Dia.new_uuid ()	// Caution! DON'T replicate this line!
-            	
-									// This is only a hack to allow dual PostreSQL / SQLite compatibility
-
-									// for PostreSQL, better decalre uuid=uuid_generate_v4()
-									// for SQLite, it mysteriously works with NULL uuids
-
-        }
-        
-        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
-        
-        return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
-        
-    },
-
-////////////////////////////////////////////////////////////////////////////////
-
-do_set_own_option_users: 
-
-    async function () {
-
-        let voc_user_option = this.db.get ([{voc_user_options: {id: this.rq.data.id_voc_user_option}}]);
-
-        if (!voc_user_option.is_own && this.user.role != 'admin') throw '#foo#:Доступ запрещён'
-
-        let d = {
-            id_user: this.user.id
-        }
-
-        for (let k of ['is_on', 'id_voc_user_option']) d [k] = this.rq.data [k]
-
-        return this.db.upsert ('user_options', d, ['id_user', 'id_voc_user_option'])
-
-    },
-    
-////////////////////////////////////////////////////////////////////////////////
-
-get_own_options_of_users: 
-
-    async function () {
-
-        let filter = this.w2ui_filter ()
-        delete filter.LIMIT
-        filter ['roles... LIKE'] = `% ${this.user.role} %`
-        filter.is_own = 1
-        
-        return await this.db.add ({}, [{voc_user_options: filter},
-            {'user_options(is_on)': {
-                id_user: this.user.uuid,
-            }}
-        ])
-
-    },    
-    
 ////////////////////////////////////////////////////////////////////////////////
 
 do_set_password_users: 
@@ -155,7 +69,7 @@ do_set_password_users:
 
         if (this.rq.p1 == undefined) throw '#p1#: Получено пустое значение пароля'
         if (this.rq.p1 != this.rq.p2) throw '#p2#: Повторное значение пароля не сходится'
-darn (this.user)
+
         let uuid = 
                    this.user.role == 'admin' ? this.rq.id || this.user.uuid : 
                    this.user.uuid

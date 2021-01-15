@@ -29,7 +29,9 @@ $_DRAW.user_own_options = async function (data) {
                 {field: 'foo',   caption: 'Статус', size: 10, render: function (i) {return i ['user_options.is_on'] ? 'Установлено' : ''}},
             ],
 
-            url: '_back/?type=users&part=own_options',
+			src: 'user_options',
+        
+			onRequest: e => e.postData.id_user = $_USER.id,
 
             onDblClick: $_DO.toggle_user_own_options,
 
