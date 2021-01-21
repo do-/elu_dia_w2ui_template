@@ -8,7 +8,7 @@ module.exports = class extends Dia.Config {
                 
         this.pools = {
         
-        	db       : Dia.DB.Pool (this.db, new (require ('./Model.js')) ()),
+        	db       : Dia.DB.Pool (this.db, new (require ('./Model.js')) (this)),
         	
             sessions : this.setup_sessions (),
             
