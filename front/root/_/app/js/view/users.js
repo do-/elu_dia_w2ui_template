@@ -26,6 +26,18 @@ $_DRAW.users = async function (data) {
 			mode: 'virtual',
 			rowRenderingMode: 'virtual',
 		},
+		
+		headerFilter: {
+//			visible: true,
+		},
+
+		searchPanel: {
+			visible: true,
+		},
+
+		editing: {
+			allowAdding: true,
+		},
 
         columns: [
         	{dataField: 'label', caption: 'ФИО'}, 
@@ -52,8 +64,18 @@ $_DRAW.users = async function (data) {
 			version: 4,
 		}),
 		
-		onRowDblClick: (e) => open_tab (`/user/${e.key._value}`),
-        
+		onRowDblClick: e => open_tab (`/user/${e.key._value}`),
+				
+		onToolbarPreparing: e => {
+		
+			let addRowButton = e.toolbarOptions.items.find (i => i.name == 'addRowButton')
+			
+			addRowButton.location = 'before'
+			
+			addRowButton.options.onClick = () => show_block ('user_new')
+
+		},
+		        
 	})
 
 /*

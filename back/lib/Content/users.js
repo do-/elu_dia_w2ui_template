@@ -19,7 +19,7 @@ get_vocs_of_users:
 select_users: 
     
     function () {
-   
+
         this.rq.sort = this.rq.sort || [{field: "label", direction: "asc"}]
 
         if (this.rq.searchLogic == 'OR') {
@@ -35,7 +35,7 @@ select_users:
         }
     
         let filter = this.w2ui_filter ()
-        
+
         filter ['uuid <>'] = '00000000-0000-0000-0000-000000000000'
         filter.is_deleted  = 0
 

@@ -9,7 +9,7 @@ module.exports = class extends require ('./Ext/Dia/Content/Handler/HTTP/Router.j
 		let {conf} = this, {pools} = conf, {headers, url} = http.request
 
 		if (/\bodata=/.test (headers.accept)) return new odata ({conf, pools, http})
-darn ({url})
+
 		if (url.match (/^\/(\?|_back)?/)) return new back ({conf, pools, http})
 
 		return new front ({conf, http})
