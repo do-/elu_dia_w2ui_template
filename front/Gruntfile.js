@@ -72,6 +72,8 @@ module.exports = function (grunt) {
             src: [
                 'root/_/libs/jquery/jquery-3.1.1.min.js', 
                 'root/_/libs/w2ui/w2ui-1.5.rc1.min.js',
+                'root/_/libs/dx/js/dx.all.js',
+//                'root/_/libs/dx/js/localization/dx.messages.ru.js',                
                 'root/_/libs/elu/elu.js',
                 'root/_/libs/elu_w2ui/elu_w2ui.js',
                 'root/_/app/handler.js',

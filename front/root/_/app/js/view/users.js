@@ -2,6 +2,61 @@ $_DRAW.users = async function (data) {
 
     $('title').text ('Пользователи системы')
 
+	$('main').dxDataGrid ({
+	
+		allowColumnResizing: true,
+		rowAlternationEnabled: true,
+		
+		filterRow: {
+			visible: true,
+		},
+
+		paging: {
+			enabled: true,
+			pageSize: 100,
+		},
+
+		pager: {
+			visible: true,
+			showInfo: true,
+			showNavigationButtons: false,
+		},
+		
+		scrolling: {
+			mode: 'virtual',
+			rowRenderingMode: 'virtual',
+		},
+
+        columns: [
+        	{dataField: 'label', caption: 'ФИО'}, 
+        	{dataField: 'login', caption: 'Login'}, 
+        	{dataField: 'id_role', caption: 'Роль', allowSorting: false,
+				lookup: {
+					dataSource: {
+						store: {
+							type: 'array',
+							data: data.roles.items,
+							key: "id"
+						},
+					},
+					valueExpr: 'id', 
+					displayExpr: 'text',
+				}
+        	}, 
+        	{dataField: 'mail',  caption: 'E-mail'},
+        ],
+        
+        dataSource: new DevExpress.data.ODataStore ({
+			url: "/_back/users",
+			key: "uuid",
+			version: 4,
+		}),
+		
+		onRowDblClick: (e) => open_tab (`/user/${e.key._value}`),
+        
+	})
+
+/*
     $('main').w2regrid ({ 
     
         name: 'usersGrid',             
@@ -27,5 +82,5 @@ $_DRAW.users = async function (data) {
     }).refresh ();
     
     $('#grid_usersGrid_search_all').focus ()
-
+*/
 }

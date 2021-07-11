@@ -1,5 +1,15 @@
 (function () {
 
+	$.getScript ($_SESSION.get ('staticRoot') + '/libs/dx/js/localization/dx.messages.ru.js', () => {
+
+		DevExpress.localization.locale ('ru')
+		
+		DevExpress.config ({
+		    oDataFilterToLower: false,
+		})
+
+	})
+
     clearTimeout (window.alarm)
     
     $(window).keydown (check_hotkeys)

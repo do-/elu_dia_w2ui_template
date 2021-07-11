@@ -8,7 +8,7 @@ const http_router = new (require ('./HttpRouter.js')) (conf)
         await conf.init ()
         console.log ('Configuration loaded OK')
         
-        await http_router.init ()
+        await http_router.init (conf)
         console.log ('Listening to HTTP on ' + http_router._._connectionKey)
 
     }
