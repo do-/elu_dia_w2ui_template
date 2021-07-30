@@ -5,11 +5,11 @@ module.exports = class extends require ('./Ext/Dia/Content/Handler/HTTP/Router.j
 
 	create_http_handler (http) {
 	
-		let {method, url} = http.request
+		let {conf} = this, {method, url} = http.request
 
-		if (method == 'POST' || url.match (/^\/(\?|_back)/)) return new back ({conf: this.conf, pools: this.conf.pools, http})
+		if (method == 'POST' || url.match (/^\/(\?|_back)/)) return new back ({conf, pools: this.conf.pools, http})
 
-		return new front ({http})
+		return new front ({conf, http})
 
 	}
 		
